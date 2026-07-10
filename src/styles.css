@@ -1563,12 +1563,35 @@ button {
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  padding: 0 14px;
-  scrollbar-width: none;
+  padding: 0 14px 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.28) transparent;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  cursor: grab;
+  user-select: none;
+}
+
+.shelf-cards.is-grabbing {
+  cursor: grabbing;
+  scroll-behavior: auto;
 }
 
 .shelf-cards::-webkit-scrollbar {
-  display: none;
+  height: 6px;
+}
+
+.shelf-cards::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.shelf-cards::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.28);
+  border-radius: 3px;
+}
+
+.shelf-cards::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.42);
 }
 
 .shelf-card {
@@ -1614,7 +1637,17 @@ button {
 }
 
 .shelf-card-flash {
+  display: flex;
+  align-items: center;
+  gap: 3px;
   margin-bottom: 6px;
+}
+
+.shelf-card-flash-icon {
+  color: #ff576f;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .shelf-card-flash-label {
@@ -1889,7 +1922,7 @@ button {
 .page-footer {
   background: #ffffff;
   border-top: 1px solid var(--border);
-  padding: 24px 16px 20px;
+  padding: 40px 16px;
 }
 
 .footer-logo {

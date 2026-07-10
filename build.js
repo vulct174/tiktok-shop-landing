@@ -112,6 +112,11 @@ function iconGift() {
   return '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/></svg>';
 }
 
+// Flame icon for Flash sale label (Material "whatshot").
+function iconFlame() {
+  return '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>';
+}
+
 // ════════════════════════════════════════════════════════════
 // SECTION RENDERERS (pure functions → HTML strings)
 // ════════════════════════════════════════════════════════════
@@ -128,7 +133,7 @@ function renderTopNav(imgBaseDir) {
   </div>
   <div class="nav-search" role="search" aria-label="Tìm kiếm sản phẩm">
     <span class="nav-search-icon" aria-hidden="true">${iconSearch()}</span>
-    <span class="nav-search-placeholder">Search</span>
+    <span class="nav-search-placeholder">Tìm kiếm</span>
   </div>
   <div class="nav-profile">
     <button class="nav-btn nav-profile-btn" aria-label="Trang cá nhân" type="button">${iconPerson()}</button>
@@ -228,13 +233,13 @@ function renderPriceTitle(product, currency, site) {
     ${origPrice}
   </div>
   <h1><span class="product-name">${esc(product.name)}</span></h1>
-  <div class="seller-line">Sold by <span>${esc(sellerName)}</span></div>
+  <div class="seller-line">Bán bởi <span>${esc(sellerName)}</span></div>
   <div class="rating-row" aria-label="Đánh giá ${rating} sao">
     <span class="rating-value">${esc(String(rating))}</span>
     <span class="rating-stars" style="font-size:13px;color:#000;" aria-hidden="true">${iconStarSolid()}</span>
     ${reviewCountHtml}
     <span class="rating-sep" aria-hidden="true"></span>
-    <span class="sold-count">${formatPrice(soldCount)} sold</span>
+    <span class="sold-count">${formatPrice(soldCount)} đã bán</span>
   </div>
 </section>`;
 }
@@ -246,13 +251,13 @@ function renderPriceTitle(product, currency, site) {
 function renderSelectOptionsRow(product, imageBaseDir, currency) {
   const variants = product.variants || {};
   const colors = Array.isArray(variants.color) ? variants.color : [];
-  const defaultLabel = colors.length ? esc(colors[0]) : 'Default';
+  const defaultLabel = colors.length ? esc(colors[0]) : 'Mặc định';
   const thumbSrc = esc(`${imageBaseDir}/${product.thumb || (Array.isArray(product.images) && product.images[0]) || ''}`);
   const altBase = esc(product.name);
 
   const colorChipsHtml = colors.length
     ? colors.map((c, i) => `<button class="chip${i === 0 ? ' active' : ''}" type="button" aria-pressed="${i === 0}">${esc(c)}</button>`).join('\n          ')
-    : `<button class="chip active" type="button" aria-pressed="true">Default</button>`;
+    : `<button class="chip active" type="button" aria-pressed="true">Mặc định</button>`;
 
   const pct = discountPct(product.price, product.originalPrice);
   const origPriceHtml = product.originalPrice && product.originalPrice > product.price
@@ -265,8 +270,8 @@ function renderSelectOptionsRow(product, imageBaseDir, currency) {
 
   return `<div class="select-options-row" id="select-options-row" role="button" tabindex="0"
     aria-haspopup="dialog" aria-controls="variant-modal" aria-label="Chọn phân loại sản phẩm">
-  <span class="select-options-label">Select options</span>
-  <span class="select-options-value">Default <span class="select-options-chevron" aria-hidden="true">${iconChevronRightNarrow()}</span></span>
+  <span class="select-options-label">Chọn phân loại</span>
+  <span class="select-options-value">Mặc định <span class="select-options-chevron" aria-hidden="true">${iconChevronRightNarrow()}</span></span>
 </div>
 
 <!-- Modal backdrop -->
@@ -296,9 +301,9 @@ function renderSelectOptionsRow(product, imageBaseDir, currency) {
       </div>
     </div>
     <div class="modal-qty-row">
-      <span class="modal-qty-label">Quantity:</span>
+      <span class="modal-qty-label">Số lượng:</span>
       <button class="qty-btn" data-action="dec" aria-label="Giảm số lượng" type="button" disabled>−</button>
-      <input class="qty-input" type="number" value="1" min="1" aria-label="Quantity" readonly>
+      <input class="qty-input" type="number" value="1" min="1" aria-label="Số lượng" readonly>
       <button class="qty-btn" data-action="inc" aria-label="Tăng số lượng" type="button">+</button>
     </div>
   </div>
@@ -329,7 +334,7 @@ function renderReviews(product, imageBaseDir) {
   const reviews = product.reviews;
   if (!reviews) {
     return `<section class="reviews-section" aria-label="Đánh giá của khách hàng">
-  <div class="reviews-section-title">Customer Reviews</div>
+  <div class="reviews-section-title">Đánh giá của khách hàng</div>
   <div class="reviews-empty">Chưa có đánh giá.</div>
 </section>`;
   }
@@ -362,7 +367,7 @@ function renderReviews(product, imageBaseDir) {
   // each rendered as a 120px card with a gradient overlay (avatar + name + stars).
   const photoItems = items.filter(it => it.photo);
   const photosHtml = photoItems.length
-    ? `<div class="reviews-photos-title">Photos from reviews</div>
+    ? `<div class="reviews-photos-title">Ảnh từ đánh giá</div>
   <div class="reviews-photos-strip" aria-label="Ảnh từ đánh giá">
     ${photoItems.map(it => {
       const initials = (it.name || '?').charAt(0).toUpperCase();
@@ -384,33 +389,33 @@ function renderReviews(product, imageBaseDir) {
   // Sort segmented control + filter chips (star dropdown, visuals, verified)
   const reviewControls = `<div class="reviews-controls">
     <div class="reviews-sort-tabs" role="tablist" aria-label="Sắp xếp đánh giá">
-      <button class="reviews-sort-tab active" type="button" role="tab" aria-selected="true" data-sort="recommended">Recommended</button>
-      <button class="reviews-sort-tab" type="button" role="tab" aria-selected="false" data-sort="recent">Most recent</button>
+      <button class="reviews-sort-tab active" type="button" role="tab" aria-selected="true" data-sort="recommended">Đề xuất</button>
+      <button class="reviews-sort-tab" type="button" role="tab" aria-selected="false" data-sort="recent">Mới nhất</button>
     </div>
     <div class="reviews-filter-row" aria-label="Lọc đánh giá">
       <div class="review-star-filter">
         <button class="review-filter-chip review-filter-chip--dropdown" type="button" aria-haspopup="listbox" aria-expanded="false" data-filter-star="all">
           <span class="review-filter-chip-star" aria-hidden="true">${iconStarSolid()}</span>
-          <span class="review-filter-chip-label">All</span>
+          <span class="review-filter-chip-label">Tất cả</span>
           <span class="review-filter-chip-caret" aria-hidden="true">${iconChevronDown()}</span>
         </button>
         <ul class="review-star-menu" role="listbox" aria-label="Lọc theo số sao" hidden>
-          <li class="review-star-option active" role="option" aria-selected="true" data-star="all" tabindex="0">All star</li>
-          <li class="review-star-option" role="option" aria-selected="false" data-star="5" tabindex="0">5 star</li>
-          <li class="review-star-option" role="option" aria-selected="false" data-star="4" tabindex="0">4 star</li>
-          <li class="review-star-option" role="option" aria-selected="false" data-star="3" tabindex="0">3 star</li>
-          <li class="review-star-option" role="option" aria-selected="false" data-star="2" tabindex="0">2 star</li>
-          <li class="review-star-option" role="option" aria-selected="false" data-star="1" tabindex="0">1 star</li>
+          <li class="review-star-option active" role="option" aria-selected="true" data-star="all" tabindex="0">Tất cả sao</li>
+          <li class="review-star-option" role="option" aria-selected="false" data-star="5" tabindex="0">5 sao</li>
+          <li class="review-star-option" role="option" aria-selected="false" data-star="4" tabindex="0">4 sao</li>
+          <li class="review-star-option" role="option" aria-selected="false" data-star="3" tabindex="0">3 sao</li>
+          <li class="review-star-option" role="option" aria-selected="false" data-star="2" tabindex="0">2 sao</li>
+          <li class="review-star-option" role="option" aria-selected="false" data-star="1" tabindex="0">1 sao</li>
         </ul>
       </div>
-      <button class="review-filter-chip" type="button" aria-pressed="false" data-filter-visuals>Includes visuals</button>
-      <button class="review-filter-chip" type="button" aria-pressed="false" data-filter-verified>Verified purchase</button>
+      <button class="review-filter-chip" type="button" aria-pressed="false" data-filter-visuals>Có hình ảnh</button>
+      <button class="review-filter-chip" type="button" aria-pressed="false" data-filter-verified>Đã mua hàng</button>
     </div>
     <div class="reviews-status-line">
-      <span class="reviews-status-text">Displaying <span class="reviews-shown-count">${items.length}</span> of ${reviews.total} reviews · Filter by</span>
-      <button class="reviews-reset" type="button">Reset filters</button>
+      <span class="reviews-status-text">Hiển thị <span class="reviews-shown-count">${items.length}</span> trong ${reviews.total} đánh giá · Lọc theo</span>
+      <button class="reviews-reset" type="button">Đặt lại bộ lọc</button>
     </div>
-    <div class="reviews-allstar-heading">All star</div>
+    <div class="reviews-allstar-heading">Tất cả sao</div>
   </div>`;
 
   const cardsHtml = items.length
@@ -425,7 +430,7 @@ function renderReviews(product, imageBaseDir) {
       </div>`
           : '';
         const verifiedHtml = item.verified
-          ? `<span class="review-name-sep" aria-hidden="true">·</span><span class="review-verified">Verified purchase</span>`
+          ? `<span class="review-name-sep" aria-hidden="true">·</span><span class="review-verified">Đã mua hàng</span>`
           : '';
         const regionHtml = item.region
           ? `<div class="review-region">${esc(item.region)}</div>`
@@ -446,19 +451,19 @@ function renderReviews(product, imageBaseDir) {
         <p class="review-text">${esc(item.text)}</p>
         ${sidePhotoHtml}
       </div>
-      ${item.itemLabel ? `<div class="review-item-label"><span>Item:</span> ${esc(item.itemLabel)}</div>` : ''}
+      ${item.itemLabel ? `<div class="review-item-label"><span>Phân loại:</span> ${esc(item.itemLabel)}</div>` : ''}
       <div class="review-date">${esc(item.date || '')}</div>
     </div>`;
       }).join('\n  ')
     : '<div class="reviews-empty">Chưa có đánh giá chi tiết.</div>';
 
   return `<section class="reviews-section" aria-label="Đánh giá của khách hàng">
-  <div class="reviews-section-title">Customer reviews</div>
+  <div class="reviews-section-title">Đánh giá của khách hàng</div>
   <div class="reviews-aggregate">
     <span class="reviews-score" aria-label="Điểm trung bình ${reviews.average}">${reviews.average}</span>
     <span class="reviews-score-star" aria-hidden="true">${iconStarSolid()}</span>
     <span class="reviews-aggregate-sep" aria-hidden="true">·</span>
-    <span class="reviews-total">${reviews.total} global reviews</span>
+    <span class="reviews-total">${reviews.total} đánh giá toàn cầu</span>
   </div>
   <div class="reviews-breakdown" aria-label="Phân bổ đánh giá">
     ${breakdownHtml}
@@ -469,8 +474,8 @@ function renderReviews(product, imageBaseDir) {
     ${cardsHtml}
   </div>
   <div class="reviews-more-wrap">
-    <button class="reviews-more-btn" type="button" aria-expanded="false" hidden>View more</button>
-    <div class="reviews-end" hidden>No more products</div>
+    <button class="reviews-more-btn" type="button" aria-expanded="false" hidden>Xem thêm</button>
+    <div class="reviews-end" hidden>Không còn đánh giá</div>
   </div>
 </section>`;
 }
@@ -491,9 +496,9 @@ function renderAbout(product, imageBaseDir) {
     : '';
 
   return `<section class="about-section" aria-label="Về sản phẩm">
-  <div class="about-title">About this product</div>
+  <div class="about-title">Về sản phẩm này</div>
   <button class="about-toggle" type="button" aria-expanded="true" aria-controls="about-content">
-    <span class="about-toggle-label" id="about-toggle-label">Product description</span>
+    <span class="about-toggle-label" id="about-toggle-label">Mô tả sản phẩm</span>
     <span class="about-chevron" aria-hidden="true">${iconChevronDown()}</span>
   </button>
   <div id="about-content" class="about-content expanded" role="region" aria-labelledby="about-toggle-label">
@@ -524,36 +529,58 @@ function renderHashtags(product) {
  * renderSellerShelf(product, otherProducts, imageBaseDir, currency)
  * Section 8: horizontal scroll cards (excludes current product)
  */
-function renderSellerShelf(product, otherProducts, imageBaseDir, currency) {
+function renderSellerShelf(product, otherProducts, imageBaseDir, currency, sellerShelf) {
   const sellerName = product.sellerName || 'shop';
-  const imgUrl = (file) => `${imageBaseDir}/${file}`;
 
-  const cards = otherProducts.map(p => {
-    const thumb = p.thumb || (Array.isArray(p.images) && p.images[0]) || '';
-    const hasFlash = Array.isArray(p.badges) && p.badges.some(b => /flash/i.test(b));
-    const flashRow = hasFlash
-      ? `<div class="shelf-card-flash"><span class="shelf-card-flash-label">Flash sale</span></div>`
+  // Absolute (http/https) images pass through; otherwise prefix base dir.
+  const resolveImg = (file) => /^https?:\/\//i.test(file) ? file : `${imageBaseDir}/${file}`;
+
+  // Prefer the dedicated seller-shelf config (real cross-sell items linking
+  // out to live listings). Fall back to internal products (link to .html).
+  const useShelfConfig = Array.isArray(sellerShelf) && sellerShelf.length > 0;
+
+  const items = useShelfConfig
+    ? sellerShelf
+    : otherProducts.map(p => ({
+        name:          p.name,
+        price:         p.price,
+        originalPrice: p.originalPrice,
+        rating:        p.rating,
+        sold:          p.sold,
+        flash:         Array.isArray(p.badges) && p.badges.some(b => /flash/i.test(b)),
+        img:           p.thumb || (Array.isArray(p.images) && p.images[0]) || '',
+        href:          `${p.slug}.html`,
+      }));
+
+  const cards = items.map(it => {
+    const flashRow = it.flash
+      ? `<div class="shelf-card-flash"><span class="shelf-card-flash-icon" aria-hidden="true">${iconFlame()}</span><span class="shelf-card-flash-label">Flash sale</span></div>`
+      : '';
+    const isExternal = /^https?:\/\//i.test(it.href || '');
+    const linkAttrs = isExternal
+      ? ` target="_blank" rel="noopener noreferrer"`
+      : '';
+    const origPrice = it.originalPrice && it.originalPrice > it.price
+      ? `<span class="shelf-card-orig">${esc(currency)}${formatPrice(it.originalPrice)}</span>`
       : '';
 
     return `<div class="shelf-card">
-      <a href="${esc(p.slug)}.html" aria-label="${esc(p.name)}" tabindex="0">
+      <a href="${esc(it.href || '#')}"${linkAttrs} aria-label="${esc(it.name)}" tabindex="0">
         <div class="shelf-card-img-wrap">
-          <img src="${esc(imgUrl(thumb))}" alt="${esc(p.name)}" loading="lazy">
+          <img src="${esc(resolveImg(it.img || ''))}" alt="${esc(it.name)}" loading="lazy">
         </div>
         <div class="shelf-card-info">
-          <h3 class="shelf-card-name">${esc(p.name)}</h3>
+          <h3 class="shelf-card-name">${esc(it.name)}</h3>
           ${flashRow}
           <div class="shelf-card-rating">
-            <span class="shelf-card-rating-value">${esc(String(p.rating || 0))}</span>
+            <span class="shelf-card-rating-value">${esc(String(it.rating || 0))}</span>
             <span class="s-star" aria-hidden="true">${iconStar()}</span>
             <span class="shelf-card-divider"></span>
-            <span class="shelf-card-sold">${formatPrice(p.sold || 0)} sold</span>
+            <span class="shelf-card-sold">${formatPrice(it.sold || 0)} đã bán</span>
           </div>
           <div class="shelf-card-price-row">
-            <span class="shelf-card-currency">${esc(currency)}</span><span class="shelf-card-price-num">${formatPrice(p.price)}</span>
-            ${p.originalPrice && p.originalPrice > p.price
-              ? `<span class="shelf-card-orig">${esc(currency)}${formatPrice(p.originalPrice)}</span>`
-              : ''}
+            <span class="shelf-card-currency">${esc(currency)}</span><span class="shelf-card-price-num">${formatPrice(it.price)}</span>
+            ${origPrice}
           </div>
         </div>
       </a>
@@ -561,7 +588,7 @@ function renderSellerShelf(product, otherProducts, imageBaseDir, currency) {
   }).join('\n  ');
 
   return `<section class="seller-shelf-section" aria-label="Khám phá thêm từ cửa hàng">
-  <div class="shelf-title">Explore more from ${esc(sellerName)}</div>
+  <div class="shelf-title">Khám phá thêm từ ${esc(sellerName)}</div>
   <div class="shelf-cards">
     ${cards}
   </div>
@@ -607,7 +634,7 @@ function renderAlsoLike(otherProducts, imageBaseDir, currency) {
           <span class="also-like-rating-value">${esc(String(p.rating || 0))}</span>
           <span class="s-star" aria-hidden="true">${iconStar()}</span>
           <span class="also-like-card-divider"></span>
-          <span class="also-like-card-sold">${formatPrice(p.sold || 0)} sold</span>
+          <span class="also-like-card-sold">${formatPrice(p.sold || 0)} đã bán</span>
         </div>
         <div class="also-like-card-price-row">
           <span class="also-like-card-currency">${esc(currency)}</span><span class="also-like-card-price-num">${formatPrice(p.price)}</span>
@@ -620,7 +647,7 @@ function renderAlsoLike(otherProducts, imageBaseDir, currency) {
   }).join('\n  ');
 
   return `<section class="also-like-section" aria-label="Bạn có thể thích">
-  <div class="also-like-title">You may also like</div>
+  <div class="also-like-title">Có thể bạn cũng thích</div>
   <div class="also-like-grid">
     ${cards}
   </div>
@@ -690,24 +717,19 @@ function renderFooter(site) {
     : '';
 
   return `<footer class="page-footer" aria-label="Thông tin trang">
-  <img class="footer-logo" src="${imgBaseDir}/tts-logo-dark.png" alt="TikTok Shop Vietnam logo">
+  <img class="footer-logo" src="${imgBaseDir}/tts-logo-light.png" alt="TikTok Shop Vietnam logo">
   ${groupsHtml}
   <div class="footer-perks-row" aria-label="Ưu đãi">
     <div class="footer-perk">
       <span class="footer-perk-icon" aria-hidden="true">${iconTruck()}</span>
-      <span class="footer-perk-label">Free shipping</span>
-      <span>Đơn từ 150k</span>
+      <span class="footer-perk-label">Miễn phí vận chuyển</span>
     </div>
     <div class="footer-perk">
       <span class="footer-perk-icon" aria-hidden="true">${iconGift()}</span>
-      <span class="footer-perk-label">New customer deals</span>
-      <span>Ưu đãi đặc biệt</span>
+      <span class="footer-perk-label">Ưu đãi khách mới</span>
     </div>
   </div>
   ${badgesHtml}
-  <div class="footer-copy">
-    © ${new Date().getFullYear()} ${esc(site.brand)}. All rights reserved.
-  </div>
 </footer>`;
 }
 
@@ -726,7 +748,7 @@ function renderStickyCta(product, currency) {
     data-price="${esc(String(product.price))}"
     data-currency="VND"
     aria-label="Mua ngay – ${formatPrice(product.price)}${esc(currency)}"
-  >Buy now</button>
+  >Mua ngay</button>
 </div>`;
 }
 
@@ -922,7 +944,7 @@ ${cards}
     </main>
     <footer class="catalog-footer">
       <div>${esc(site.brand)}</div>
-      <div>© ${new Date().getFullYear()} ${esc(site.brand)}. All rights reserved.</div>
+      <div>© ${new Date().getFullYear()} ${esc(site.brand)}. Bảo lưu mọi quyền.</div>
     </footer>
   </div>
 </body>
@@ -933,7 +955,7 @@ ${cards}
 // PAGE ASSEMBLER
 // ════════════════════════════════════════════════════════════
 
-function assemblePage(product, allProducts, site, tracking, templateHtml) {
+function assemblePage(product, allProducts, site, tracking, templateHtml, sellerShelf) {
   const currency   = site.currency || '₫';
   const imgBaseDir = site.imageBaseDir || 'assets/products';
 
@@ -948,8 +970,10 @@ function assemblePage(product, allProducts, site, tracking, templateHtml) {
   const sectionReviews       = renderReviews(product, imgBaseDir);
   const sectionAbout         = renderAbout(product, imgBaseDir);
   const sectionHashtags      = renderHashtags(product);
-  const sectionSellerShelf   = renderSellerShelf(product, otherProducts, imgBaseDir, currency);
-  const sectionAlsoLike      = renderAlsoLike(otherProducts, imgBaseDir, currency);
+  const sectionSellerShelf   = renderSellerShelf(product, otherProducts, imgBaseDir, currency, sellerShelf);
+  // TẠM ẨN "You may also like" — bật lại bằng cách đổi về:
+  // const sectionAlsoLike   = renderAlsoLike(otherProducts, imgBaseDir, currency);
+  const sectionAlsoLike      = '';
   const sectionBreadcrumb    = renderBreadcrumb(product, site);
   const sectionFooter        = renderFooter(site);
   const sectionStickyCta     = renderStickyCta(product, currency);
@@ -1014,12 +1038,13 @@ async function build() {
 
   // ── Load config via pathToFileURL (Windows-safe ESM import) ──
   const configUrl = pathToFileURL(CONFIG).href;
-  let site, tracking, products;
+  let site, tracking, products, sellerShelf;
   try {
     const config = await import(configUrl);
-    site     = config.site;
-    tracking = config.tracking;
-    products = config.products;
+    site        = config.site;
+    tracking    = config.tracking;
+    products    = config.products;
+    sellerShelf = config.sellerShelf;
   } catch (err) {
     console.error('Failed to import config:', err.message);
     process.exit(1);
@@ -1056,7 +1081,7 @@ async function build() {
   // ── Generate per-product pages ──
   const generatedFiles = [];
   for (const product of products) {
-    const html     = assemblePage(product, products, site, tracking, templateHtml);
+    const html     = assemblePage(product, products, site, tracking, templateHtml, sellerShelf);
     const outFile  = path.join(DIST, `${product.slug}.html`);
     fs.writeFileSync(outFile, html, 'utf8');
     generatedFiles.push(`${product.slug}.html`);

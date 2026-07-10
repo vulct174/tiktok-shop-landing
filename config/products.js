@@ -18,11 +18,11 @@ export const site = {
     appStore: 'badge-app-store.png',
   },
   // Default breadcrumb trail
-  breadcrumb: ['TikTok Shop', 'Home Improvement', 'Solar & Wind Power', 'Solar Power Systems'],
+  breadcrumb: ['TikTok Shop', 'Nhà cửa & Đời sống', 'Năng lượng mặt trời & Gió', 'Hệ thống điện mặt trời'],
   // Footer accordion groups
   footerGroups: [
     {
-      title: 'Shop',
+      title: 'Mua sắm',
       links: [
         { label: 'Tất cả danh mục', href: '#' },
         { label: 'Flash Sale', href: '#' },
@@ -31,7 +31,7 @@ export const site = {
       ],
     },
     {
-      title: 'Sell',
+      title: 'Bán hàng',
       links: [
         { label: 'Bán hàng trên TikTok Shop', href: '#' },
         { label: 'Trung tâm người bán', href: '#' },
@@ -39,7 +39,7 @@ export const site = {
       ],
     },
     {
-      title: 'About',
+      title: 'Về TikTok Shop',
       links: [
         { label: 'Giới thiệu TikTok Shop', href: '#' },
         { label: 'Blog & Tin tức', href: '#' },
@@ -47,7 +47,7 @@ export const site = {
       ],
     },
     {
-      title: 'Customer Support',
+      title: 'Hỗ trợ khách hàng',
       links: [
         { label: 'Trung tâm trợ giúp', href: '#' },
         { label: 'Hoàn trả & Hoàn tiền', href: '#' },
@@ -56,7 +56,7 @@ export const site = {
       ],
     },
     {
-      title: 'Legal',
+      title: 'Pháp lý',
       links: [
         { label: 'Điều khoản dịch vụ', href: '#' },
         { label: 'Chính sách bảo mật', href: '#' },
@@ -160,7 +160,7 @@ export const products = [
       'den-nlmt-2000w-detail-40.jpg',
     ],
     variants: {
-      color: ['Default'],
+      color: ['Mặc định'],
     },
     badges: ['Pin Cell', 'Tặng dây 5M', '308 LED', 'Bảo hành 5 năm'],
     usp: [
@@ -199,7 +199,7 @@ export const products = [
           stars: 5,
           text: 'đèn sáng lắm nha nhà bên cạnh mua mắt tiền hơn đèn mình ăn đứt',
           photo: 'den-nlmt-2000w-detail-05.webp',
-          itemLabel: 'Default',
+          itemLabel: 'Mặc định',
           date: '2026-07-07',
         },
         {
@@ -208,7 +208,7 @@ export const products = [
           region: 'VN',
           stars: 5,
           text: 'đèn giống như quảng cáo chất lượng thì phải dùng thử xem thế nào',
-          itemLabel: 'Default',
+          itemLabel: 'Mặc định',
           date: '2026-07-04',
         },
         {
@@ -218,7 +218,7 @@ export const products = [
           stars: 5,
           text: 'Nhận được sản phẩm y như giới thiệu, đèn sáng, còn chất lượng thì thời gian mới biết được',
           photo: 'den-nlmt-2000w-detail-10.webp',
-          itemLabel: 'Default',
+          itemLabel: 'Mặc định',
           date: '2026-07-04',
         },
       ],
@@ -367,5 +367,75 @@ export const products = [
     badges: ['Bán Chạy #1', 'Flash Sale'],
     usp: [],
     relatedIds: [],
+  },
+];
+
+// ============================================================
+// SELLER SHELF — "Explore more from <seller>" cross-sell cards.
+// These are NOT landing pages; each links out to the live
+// TikTok Shop listing (href) and uses the shop's CDN image (img).
+// Data mirrors the real shop shelf (seller: Năng Lượng Xanh).
+// Fields: name, price, originalPrice, rating, sold, flash, img, href
+// ============================================================
+export const sellerShelf = [
+  {
+    name: '[TẶNG DÂY 5M] [BẢN CAO CẤP 308 LED] [5 MẶT SÁNG TOẢ RỘNG GẤP 3] [ BẢO HÀNH 5 NĂM 1 ĐỔI 1] Đèn Năng Lượng Mặt Trời Mắt Ngọc 2000W.',
+    price: 809000, originalPrice: 1818000, rating: 4.7, sold: 1320, flash: true,
+    img: 'https://p16-oec-va.ibyteimg.com/tos-maliva-i-o3syd03w52-us/d6740177fd1b44159aed1a66be57863f~tplv-o3syd03w52-resize-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my&from=2378011839',
+    href: 'https://shop.tiktok.com/vn/pdp/1733587213215368841',
+  },
+  {
+    name: '[Bảo Hành 5 Năm 1 Đổi 1] [BẢN CAO CẤP, NHÔM ĐÚC 96 LED 5054] Đèn Năng Lượng Mặt Trời Mắt Ngọc 600W',
+    price: 489000, originalPrice: 1178000, rating: 4.8, sold: 656, flash: true,
+    img: 'https://p16-oec-va.ibyteimg.com/tos-maliva-i-o3syd03w52-us/8782c2aab89342ffa25e0c8c6da4ecbd~tplv-o3syd03w52-resize-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my&from=2378011839',
+    href: 'https://shop.tiktok.com/vn/pdp/den-nang-luong-mat-troi-600w-chong-loa-bao-hanh-5-nam/1734748237523355273',
+  },
+  {
+    name: '[BẢN CAO CẤP, NHÔM ĐÚC 96 LED 5054] Đèn Năng Lượng Mặt Trời Mắt Ngọc 600W, Bảo Hành Chính Hãng Công Ty GB Solar 5 Năm 1 Đổi 1',
+    price: 489000, originalPrice: 1178000, rating: 4.5, sold: 2388, flash: true,
+    img: 'https://p16-oec-va.ibyteimg.com/tos-maliva-i-o3syd03w52-us/8782c2aab89342ffa25e0c8c6da4ecbd~tplv-o3syd03w52-resize-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my&from=2378011839',
+    href: 'https://shop.tiktok.com/vn/pdp/den-nang-luong-mat-troi-600w-chong-loa-bao-hanh-5-nam/1733720717718161033',
+  },
+  {
+    name: '[224 LED BẢN NÂNG CẤP BẢO HÀNH 5 NĂM 1 ĐỔI 1] Đèn Năng Lượng Mặt Trời Mắt Ngọc 2000W.',
+    price: 719000, originalPrice: 1638000, rating: 4.2, sold: 3255, flash: true,
+    img: 'https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/f1a4357011a14a52a7c6945e4f92b1b9~tplv-aphluv4xwc-resize-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my&from=2378011839',
+    href: 'https://shop.tiktok.com/vn/pdp/den-nang-luong-mat-troi-2000w-bao-hanh-5-nam-chong-loa/1732718737939728009',
+  },
+  {
+    name: '[224 LED BẢN NÂNG CẤP BẢO HÀNH 5 NĂM 1 ĐỔI 1] Đèn Năng Lượng Mặt Trời Mắt Ngọc 2000W',
+    price: 719000, originalPrice: 1638000, rating: 4.4, sold: 6602, flash: true,
+    img: 'https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/f1a4357011a14a52a7c6945e4f92b1b9~tplv-aphluv4xwc-resize-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my&from=2378011839',
+    href: 'https://shop.tiktok.com/vn/pdp/den-nang-luong-mat-troi-2000w-bao-hanh-5-nam-chong-loa/1732505838367442569',
+  },
+  {
+    name: 'Dây nối dài 5m đèn năng lượng ,Chống Nước, Bảo hành 2 năm 1 đổi 1',
+    price: 49000, originalPrice: 98000, rating: 4.7, sold: 6447, flash: true,
+    img: 'https://p16-oec-va.ibyteimg.com/tos-maliva-i-o3syd03w52-us/bc0ca9f48db943d49094178e09c0f828~tplv-o3syd03w52-resize-webp:600:600.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my&from=2378011839',
+    href: 'https://shop.tiktok.com/vn/pdp/day-noi-dai-5m-den-nang-luong-mat-troi-chong-nuoc-an-toan/1729578381774064265',
+  },
+  {
+    name: '[PIN CELL+1 ĐỔI 1+BẢO HÀNH 5 NĂM] [224 LED BẢN NÂNG CẤP] Đèn Năng Lượng Mặt Trời Mắt Ngọc 2000W.',
+    price: 719000, originalPrice: 1638000, rating: 4.7, sold: 1736, flash: true,
+    img: 'https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/f1a4357011a14a52a7c6945e4f92b1b9~tplv-aphluv4xwc-resize-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my&from=2378011839',
+    href: 'https://shop.tiktok.com/vn/pdp/1734561655787652745',
+  },
+  {
+    name: '[COMBO MUA 2 BỘ TẶNG 2 DÂY NỐI 5M] [BẢN CAO CẤP 308 LED] BẢO HÀNH 5 NĂM 1 ĐỔI 1, Đèn Năng Lượng Mặt Trời Mắt Ngọc 2000W',
+    price: 1648000, originalPrice: 3636000, rating: 4.8, sold: 415, flash: true,
+    img: 'https://p16-oec-va.ibyteimg.com/tos-maliva-i-o3syd03w52-us/1693fb5c2d4d44cda63d31695d5e7900~tplv-o3syd03w52-resize-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my&from=2378011839',
+    href: 'https://shop.tiktok.com/vn/pdp/den-nang-luong-mat-troi-2000w-chong-loa-bao-hanh-5-nam/1733587212651431561',
+  },
+  {
+    name: '[PIN CELL+1 ĐỔI 1+BẢO HÀNH 5 NĂM] [224 LED BẢN NÂNG CẤP] Đèn Năng Lượng Mặt Trời Mắt Ngọc 2000W.',
+    price: 719000, originalPrice: 1638000, rating: 4.5, sold: 445, flash: true,
+    img: 'https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/f1a4357011a14a52a7c6945e4f92b1b9~tplv-aphluv4xwc-resize-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my&from=2378011839',
+    href: 'https://shop.tiktok.com/vn/pdp/den-nang-luong-mat-troi-2000w-chong-loa-bao-hanh-5-nam/1735445050799720073',
+  },
+  {
+    name: '[224 LED, COMBO MUA 2 BỘ TẶNG 1 DÂY NỐI 5M] [BẢN NÂNG CẤP BẢO HÀNH 5 NĂM 1 ĐỔI 1] Đèn Năng Lượng Mặt Trời Mắt Ngọc 2000W',
+    price: 1468000, originalPrice: 3276000, rating: 4.4, sold: 1458, flash: true,
+    img: 'https://p16-oec-sg.ibyteimg.com/tos-alisg-i-aphluv4xwc-sg/575811b05bcc42d6948d87f0c3ea717c~tplv-aphluv4xwc-resize-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my&from=2378011839',
+    href: 'https://shop.tiktok.com/vn/pdp/den-nang-luong-mat-troi-2000w-bao-hanh-5-nam-chong-tham/1732506131771262601',
   },
 ];
