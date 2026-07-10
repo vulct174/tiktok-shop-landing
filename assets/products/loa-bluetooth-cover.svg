@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
+  <rect width="800" height="800" fill="#fff5f5"/>
+  <rect x="50" y="50" width="700" height="700" fill="#fadbd8" rx="20"/>
+  <text x="400" y="340" font-family="Arial, sans-serif" font-size="44" fill="#e74c3c" text-anchor="middle" font-weight="bold">Loa Bluetooth</text>
+  <text x="400" y="400" font-family="Arial, sans-serif" font-size="36" fill="#e74c3c" text-anchor="middle">Chống Nước IPX7</text>
+  <text x="400" y="480" font-family="Arial, sans-serif" font-size="28" fill="#f1948a" text-anchor="middle">360° Sound - Sản Phẩm #6</text>
+  <circle cx="400" cy="220" r="80" fill="#e74c3c" opacity="0.3"/>
+  <text x="400" y="235" font-family="Arial, sans-serif" font-size="60" fill="#7b241c" text-anchor="middle">🔊</text>
+</svg>
