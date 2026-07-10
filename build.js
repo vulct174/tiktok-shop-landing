@@ -117,6 +117,21 @@ function iconFlame() {
   return '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>';
 }
 
+// Shopping cart / trolley — clean outline (stroke) matching TikTok bottom-bar style.
+function iconCart() {
+  return '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/><path d="M2.5 4H5l1.9 11.4a1 1 0 0 0 1 .85h8.75a1 1 0 0 0 .98-.8L20.5 8H6.2"/></svg>';
+}
+
+// Shopping bag — clean outline (stroke) matching TikTok bottom-bar style.
+function iconShop() {
+  return '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.2 8h13.6l-1 11.4a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9L5.2 8Z"/><path d="M8.5 8V6.5a3.5 3.5 0 0 1 7 0V8"/></svg>';
+}
+
+// Speech-bubble / chat — clean outline (stroke) matching TikTok bottom-bar style.
+function iconChat() {
+  return '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 4h13A1.5 1.5 0 0 1 20 5.5v9a1.5 1.5 0 0 1-1.5 1.5H9.5L5 19.5V16h-.5A1.5 1.5 0 0 1 4 14.5v-9A1.5 1.5 0 0 1 5.5 4Z"/></svg>';
+}
+
 // ════════════════════════════════════════════════════════════
 // SECTION RENDERERS (pure functions → HTML strings)
 // ════════════════════════════════════════════════════════════
@@ -128,16 +143,13 @@ function iconFlame() {
 function renderTopNav(imgBaseDir) {
   return `<nav class="top-nav" aria-label="Điều hướng chính">
   <div class="nav-left-group">
-    <button class="nav-btn nav-back-btn" aria-label="Quay lại" type="button">${iconArrowLeft()}</button>
     <img src="${imgBaseDir}/tts-logo-light.png" alt="TikTok Shop Vietnam" class="nav-logo-img">
   </div>
   <div class="nav-search" role="search" aria-label="Tìm kiếm sản phẩm">
     <span class="nav-search-icon" aria-hidden="true">${iconSearch()}</span>
     <span class="nav-search-placeholder">Tìm kiếm</span>
   </div>
-  <div class="nav-profile">
-    <button class="nav-btn nav-profile-btn" aria-label="Trang cá nhân" type="button">${iconPerson()}</button>
-  </div>
+  <button class="nav-btn nav-cart-btn" aria-label="Giỏ hàng" type="button">${iconCart()}</button>
 </nav>`;
 }
 
@@ -734,11 +746,340 @@ function renderFooter(site) {
 }
 
 /**
+ * iconLocationPin()
+ * Inline SVG: location / map-pin for address sheet.
+ */
+function iconLocationPin() {
+  return '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>';
+}
+
+/**
+ * iconCOD()
+ * Cash on delivery icon (wallet/cash outline).
+ */
+function iconCOD() {
+  return '<svg width="1.2em" height="1.2em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 10v4m-2-2h4"/></svg>';
+}
+
+/**
+ * iconPayLater()
+ * TikTok PayLater icon (clock with coin).
+ */
+function iconPayLater() {
+  return '<svg width="1.2em" height="1.2em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>';
+}
+
+/**
+ * iconCard()
+ * Credit/debit card icon.
+ */
+function iconCard() {
+  return '<svg width="1.2em" height="1.2em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>';
+}
+
+/**
+ * renderCheckoutSheet(product, currency)
+ * Section 13: mock Order-summary bottom sheet.
+ * Rendered into <!-- SECTION_CHECKOUT --> via assemblePage.
+ */
+function renderCheckoutSheet(product, currency) {
+  const thumbSrc = esc(`${product._imgBaseDir || 'assets/products'}/${product.thumb || (Array.isArray(product.images) && product.images[0]) || ''}`);
+  const altBase = esc(product.name);
+  const unitPrice = product.price;
+  // Mock seller discount: 10% off the original (or 5% off unit if no original)
+  const origPrice = product.originalPrice && product.originalPrice > unitPrice
+    ? product.originalPrice
+    : Math.round(unitPrice * 1.1);
+  const discountAmt = origPrice - unitPrice;
+  // Default variant label
+  const variants = product.variants || {};
+  const colors = Array.isArray(variants.color) ? variants.color : [];
+  const variantLabel = colors.length ? esc(colors[0]) : 'Mặc định';
+
+  return `<!-- Order-summary backdrop -->
+<div id="checkout-backdrop" class="modal-backdrop checkout-backdrop" hidden aria-hidden="true"></div>
+
+<!-- Order-summary bottom sheet -->
+<div id="checkout-sheet" class="checkout-sheet"
+  role="dialog" aria-modal="true" aria-labelledby="checkout-sheet-title"
+  hidden>
+  <div class="modal-drag-indicator" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <div class="checkout-header">
+    <button class="modal-close checkout-close-btn" type="button" aria-label="Đóng đơn hàng">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+    </button>
+    <span class="checkout-title" id="checkout-sheet-title">Đơn hàng</span>
+    <span class="checkout-subtitle">Mua hàng nhanh · Miễn phí vận chuyển</span>
+  </div>
+
+  <!-- Scrollable body -->
+  <div class="checkout-body">
+
+    <!-- Shipping address card -->
+    <button class="checkout-address-card" id="checkout-address-card"
+      type="button" aria-haspopup="dialog" aria-label="Thêm địa chỉ giao hàng">
+      <span class="checkout-address-icon" aria-hidden="true">${iconLocationPin()}</span>
+      <div class="checkout-address-content">
+        <div class="checkout-address-prompt" id="checkout-address-display">
+          <span class="checkout-address-prompt-text">Thêm địa chỉ giao hàng</span>
+          <span class="checkout-address-prompt-sub">Nhấn để thêm địa chỉ</span>
+        </div>
+      </div>
+      <span class="checkout-address-chevron" aria-hidden="true">${iconChevronRight()}</span>
+    </button>
+
+    <!-- Product line -->
+    <div class="checkout-product-line">
+      <img class="checkout-product-thumb" src="${thumbSrc}" alt="${altBase}" loading="lazy">
+      <div class="checkout-product-info">
+        <div class="checkout-product-name">${esc(product.name)}</div>
+        <div class="checkout-product-variant">${variantLabel}</div>
+        <div class="checkout-product-price-row">
+          <span class="checkout-product-price"
+            id="checkout-line-total"
+            data-unit-price="${esc(String(unitPrice))}"
+            data-orig-price="${esc(String(origPrice))}"
+            data-discount-amt="${esc(String(discountAmt))}"
+            data-product-id="${esc(String(product.id))}"
+            data-product-name="${esc(product.name)}"
+            data-currency="VND"
+          >${formatPrice(unitPrice)}${esc(currency)}</span>
+          <div class="checkout-qty-stepper">
+            <button class="qty-btn checkout-qty-btn" data-action="dec" type="button"
+              aria-label="Giảm số lượng" disabled>−</button>
+            <input class="qty-input checkout-qty-input" type="number"
+              value="1" min="1" aria-label="Số lượng" readonly>
+            <button class="qty-btn checkout-qty-btn" data-action="inc" type="button"
+              aria-label="Tăng số lượng">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Discount row -->
+    <div class="checkout-discount-row">
+      <span class="checkout-discount-label">Giảm giá người bán</span>
+      <span class="checkout-discount-value" id="checkout-discount-display">−${formatPrice(discountAmt)}${esc(currency)}</span>
+    </div>
+
+    <!-- Totals breakdown -->
+    <div class="checkout-totals">
+      <div class="checkout-totals-row">
+        <span>Giá gốc</span>
+        <span id="checkout-orig-display">${formatPrice(origPrice)}${esc(currency)}</span>
+      </div>
+      <div class="checkout-totals-row checkout-totals-row--coupon">
+        <span>Voucher người bán</span>
+        <span class="checkout-coupon-value" id="checkout-coupon-display">−${formatPrice(discountAmt)}${esc(currency)}</span>
+      </div>
+      <div class="checkout-totals-row checkout-totals-row--total">
+        <span>Tổng cộng</span>
+        <span class="checkout-total-value" id="checkout-total-display">${formatPrice(unitPrice)}${esc(currency)}</span>
+      </div>
+    </div>
+
+    <!-- Payment method -->
+    <div class="checkout-payment-section">
+      <div class="checkout-payment-label">Phương thức thanh toán</div>
+      <fieldset class="checkout-payment-group" aria-label="Chọn phương thức thanh toán">
+        <legend class="sr-only">Phương thức thanh toán</legend>
+
+        <label class="checkout-payment-option">
+          <input class="checkout-payment-radio" type="radio"
+            name="checkout-payment" value="cod" checked
+            aria-label="Thanh toán khi nhận hàng (COD)">
+          <span class="checkout-payment-icon" aria-hidden="true">${iconCOD()}</span>
+          <span class="checkout-payment-text">
+            <span class="checkout-payment-name">Thanh toán khi nhận hàng</span>
+            <span class="checkout-payment-desc">COD – Miễn phí</span>
+          </span>
+          <span class="checkout-payment-check" aria-hidden="true">${iconCheck()}</span>
+        </label>
+
+        <label class="checkout-payment-option">
+          <input class="checkout-payment-radio" type="radio"
+            name="checkout-payment" value="paylater"
+            aria-label="TikTok PayLater">
+          <span class="checkout-payment-icon" aria-hidden="true">${iconPayLater()}</span>
+          <span class="checkout-payment-text">
+            <span class="checkout-payment-name">TikTok PayLater</span>
+            <span class="checkout-payment-desc">Trả sau · 0% lãi suất</span>
+          </span>
+          <span class="checkout-payment-check" aria-hidden="true">${iconCheck()}</span>
+        </label>
+
+        <label class="checkout-payment-option">
+          <input class="checkout-payment-radio" type="radio"
+            name="checkout-payment" value="card"
+            aria-label="Thẻ tín dụng / Ghi nợ">
+          <span class="checkout-payment-icon" aria-hidden="true">${iconCard()}</span>
+          <span class="checkout-payment-text">
+            <span class="checkout-payment-name">Thẻ tín dụng / Ghi nợ</span>
+            <span class="checkout-payment-desc">Visa, Mastercard, JCB</span>
+          </span>
+          <span class="checkout-payment-check" aria-hidden="true">${iconCheck()}</span>
+        </label>
+
+      </fieldset>
+    </div>
+
+    <!-- Inline hint (shown when place-order attempted without address) -->
+    <div class="checkout-address-hint" id="checkout-address-hint" hidden>
+      <span class="checkout-address-hint-text">Bạn chưa có địa chỉ giao hàng. Đơn hàng vẫn được đặt (demo) nhưng thường cần địa chỉ.</span>
+    </div>
+
+    <!-- Success state (shown after place order) -->
+    <div class="checkout-success" id="checkout-success" hidden>
+      <span class="checkout-success-icon" aria-hidden="true">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <circle cx="24" cy="24" r="22" fill="#E7F7F5"/>
+          <path d="M14 24l7 7 13-13" stroke="#12B0A0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <div class="checkout-success-title">Đặt hàng thành công</div>
+      <div class="checkout-success-sub">Đơn hàng của bạn đã được ghi nhận (demo).</div>
+    </div>
+
+    <!-- Spacer so footer doesn't overlap last item -->
+    <div class="checkout-body-spacer" aria-hidden="true"></div>
+  </div><!-- /.checkout-body -->
+
+  <!-- Sticky footer -->
+  <div class="checkout-footer" id="checkout-footer">
+    <div class="checkout-footer-total">
+      <span class="checkout-footer-total-label">Tổng cộng</span>
+      <span class="checkout-footer-total-value" id="checkout-footer-total">${formatPrice(unitPrice)}${esc(currency)}</span>
+    </div>
+    <button class="checkout-place-order-btn" id="checkout-place-order-btn" type="button">
+      Đặt hàng
+    </button>
+  </div>
+</div>`;
+}
+
+/**
+ * renderAddressSheet()
+ * Section 13: Add-address sub-sheet (portalled, layered above order sheet).
+ */
+function renderAddressSheet() {
+  return `<!-- Address sub-sheet backdrop -->
+<div id="address-backdrop" class="modal-backdrop address-backdrop" hidden aria-hidden="true"></div>
+
+<!-- Add-address bottom sheet -->
+<div id="address-sheet" class="address-sheet"
+  role="dialog" aria-modal="true" aria-labelledby="address-sheet-title"
+  hidden>
+  <div class="modal-drag-indicator" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <div class="address-header">
+    <button class="modal-close address-close-btn" type="button" aria-label="Đóng">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+    </button>
+    <span class="address-title" id="address-sheet-title">Thêm địa chỉ mới</span>
+  </div>
+
+  <!-- Form body -->
+  <div class="address-body">
+    <form class="address-form" id="address-form" novalidate>
+
+      <!-- Name field -->
+      <div class="address-field-group">
+        <label class="address-field-label" for="addr-name">Họ và tên <span class="address-required" aria-hidden="true">*</span></label>
+        <input class="address-field-input" id="addr-name" name="name"
+          type="text" autocomplete="name" required
+          placeholder="Nhập họ và tên" aria-required="true">
+      </div>
+
+      <!-- Phone field -->
+      <div class="address-field-group">
+        <label class="address-field-label" for="addr-phone">Số điện thoại <span class="address-required" aria-hidden="true">*</span></label>
+        <div class="address-phone-row">
+          <span class="address-phone-prefix" aria-label="Mã quốc gia Việt Nam">VN +84</span>
+          <input class="address-field-input address-phone-input" id="addr-phone" name="phone"
+            type="tel" autocomplete="tel-national" required
+            placeholder="9x xxxx xxxx" aria-required="true"
+            aria-describedby="addr-phone-error"
+            inputmode="numeric">
+        </div>
+        <div class="address-field-error" id="addr-phone-error" role="alert" aria-live="polite" hidden>
+          Số điện thoại không hợp lệ. Nhập 9–10 số bắt đầu bằng 3, 5, 7, 8 hoặc 9.
+        </div>
+      </div>
+
+      <!-- Address select row -->
+      <div class="address-field-group">
+        <label class="address-field-label" id="addr-select-label">Địa chỉ</label>
+        <div class="address-select-row" id="addr-select" tabindex="0" role="button" aria-labelledby="addr-select-label">
+          <span class="address-select-placeholder">Chọn tỉnh / Thành phố, Quận / Huyện, Phường / Xã</span>
+          <span class="address-select-chevron" aria-hidden="true">${iconChevronRight()}</span>
+        </div>
+      </div>
+
+      <!-- Current location card -->
+      <div class="address-location-card">
+        <span class="address-location-icon" aria-hidden="true">${iconLocationPin()}</span>
+        <div class="address-location-content">
+          <div class="address-location-label">Vị trí hiện tại</div>
+          <div class="address-location-sub">Dùng GPS để xác định địa chỉ</div>
+        </div>
+        <button class="address-use-location-btn" type="button" aria-label="Sử dụng vị trí hiện tại (demo)">
+          Dùng vị trí này
+        </button>
+      </div>
+
+      <!-- Address details -->
+      <div class="address-field-group">
+        <label class="address-field-label" for="addr-detail">Chi tiết địa chỉ <span class="address-optional">(tùy chọn)</span></label>
+        <textarea class="address-field-input address-detail-textarea" id="addr-detail" name="detail"
+          placeholder="Số nhà, tên đường, tòa nhà…" rows="2"
+          aria-label="Chi tiết địa chỉ"></textarea>
+      </div>
+
+      <!-- Set as default toggle -->
+      <div class="address-default-row">
+        <span class="address-default-label">Đặt làm địa chỉ mặc định</span>
+        <button class="address-default-toggle" id="addr-default-toggle"
+          type="button" role="switch" aria-checked="false"
+          aria-label="Đặt làm địa chỉ mặc định">
+          <span class="address-toggle-thumb" aria-hidden="true"></span>
+        </button>
+      </div>
+
+    </form>
+  </div><!-- /.address-body -->
+
+  <!-- Save button footer -->
+  <div class="address-footer">
+    <button class="address-save-btn" id="address-save-btn" type="button" disabled
+      aria-disabled="true">
+      Lưu địa chỉ
+    </button>
+  </div>
+</div>`;
+}
+
+/**
  * renderStickyCta(product, currency)
  * Section 12: full-width fixed Buy now pill
  */
 function renderStickyCta(product, currency) {
   return `<div class="sticky-cta-bar" role="complementary" aria-label="Mua hàng">
+  <div class="sticky-cta-left">
+    <button class="cta-icon-btn" type="button" aria-label="Shop">
+      <span class="cta-icon-btn-icon" aria-hidden="true">${iconShop()}</span>
+      <span class="cta-icon-btn-label">Shop</span>
+    </button>
+    <button class="cta-icon-btn" type="button" aria-label="Chat">
+      <span class="cta-icon-btn-icon" aria-hidden="true">${iconChat()}</span>
+      <span class="cta-icon-btn-label">Chat</span>
+    </button>
+  </div>
+  <button class="cta-icon-btn cta-cart-btn" type="button" aria-label="Giỏ hàng">
+    <span class="cta-icon-btn-icon" aria-hidden="true">${iconCart()}</span>
+  </button>
   <button
     class="cta-buy-now"
     type="button"
@@ -747,8 +1088,11 @@ function renderStickyCta(product, currency) {
     data-product-name="${esc(product.name)}"
     data-price="${esc(String(product.price))}"
     data-currency="VND"
-    aria-label="Mua ngay – ${formatPrice(product.price)}${esc(currency)}"
-  >Mua ngay</button>
+    aria-label="Mua ngay – ${formatPrice(product.price)}${esc(currency)}, miễn phí vận chuyển"
+  >
+    <span class="cta-buy-now-label">Mua ngay</span>
+    <span class="cta-buy-now-price">${formatPrice(product.price)}${esc(currency)}<span class="cta-buy-now-sep">|</span>Miễn phí vận chuyển</span>
+  </button>
 </div>`;
 }
 
@@ -977,6 +1321,9 @@ function assemblePage(product, allProducts, site, tracking, templateHtml, seller
   const sectionBreadcrumb    = renderBreadcrumb(product, site);
   const sectionFooter        = renderFooter(site);
   const sectionStickyCta     = renderStickyCta(product, currency);
+  // Section 13: checkout sheets (portalled, rendered outside .page-wrapper)
+  const productWithImgDir    = Object.assign({}, product, { _imgBaseDir: imgBaseDir });
+  const sectionCheckout      = renderCheckoutSheet(productWithImgDir, currency) + '\n' + renderAddressSheet();
 
   // Build tracking snippets
   const trackingHead         = buildTrackingHead(tracking);
@@ -1021,6 +1368,7 @@ function assemblePage(product, allProducts, site, tracking, templateHtml, seller
   html = html.replace('<!-- SECTION_BREADCRUMB -->',   sectionBreadcrumb);
   html = html.replace('<!-- SECTION_FOOTER -->',       sectionFooter);
   html = html.replace('<!-- SECTION_STICKY_CTA -->',   sectionStickyCta);
+  html = html.replace('<!-- SECTION_CHECKOUT -->',      sectionCheckout);
 
   // Tracking injection
   html = html.replace('<!-- TRACKING_HEAD -->',          trackingHead);

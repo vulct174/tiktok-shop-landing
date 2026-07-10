@@ -373,6 +373,455 @@
 })();
 
 /* ════════════════════════════════════════════════════════════
+   SECTION 13a – Checkout Order-summary sheet
+   Opens when .cta-buy-now is clicked. Mirrors initVariantModal pattern:
+   portal to body, backdrop, focus trap, ESC, inert, restore focus,
+   prefers-reduced-motion.
+   ════════════════════════════════════════════════════════════ */
+(function initCheckoutSheet() {
+  var sheet = document.getElementById('checkout-sheet');
+  var backdrop = document.getElementById('checkout-backdrop');
+  if (!sheet || !backdrop) return;
+
+  var openBtns = document.querySelectorAll('.cta-buy-now');
+  var closeBtns = sheet.querySelectorAll('.checkout-close-btn');
+
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var lastFocused = null;
+  var addressSaved = false;
+
+  // ── Portal: move to document.body ──────────────────────────
+  if (backdrop.parentElement !== document.body) document.body.appendChild(backdrop);
+  if (sheet.parentElement !== document.body) document.body.appendChild(sheet);
+
+  // ── Focusable helper ───────────────────────────────────────
+  function getFocusable() {
+    return Array.from(sheet.querySelectorAll(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter(function(el) {
+      return !el.closest('[hidden]') && el.offsetParent !== null;
+    });
+  }
+
+  // ── Open / close ───────────────────────────────────────────
+  function openSheet() {
+    lastFocused = document.activeElement;
+    sheet.removeAttribute('hidden');
+    backdrop.removeAttribute('hidden');
+    // Force reflow for transition
+    void sheet.offsetWidth;
+    sheet.classList.add('open');
+    backdrop.classList.add('open');
+    var wrapper = document.querySelector('.page-wrapper');
+    if (wrapper) { wrapper.setAttribute('aria-hidden', 'true'); wrapper.inert = true; }
+    var focusable = getFocusable();
+    if (focusable.length) focusable[0].focus();
+  }
+
+  function closeSheet() {
+    sheet.classList.remove('open');
+    backdrop.classList.remove('open');
+    var wrapper = document.querySelector('.page-wrapper');
+    if (wrapper) { wrapper.removeAttribute('aria-hidden'); wrapper.inert = false; }
+    function finish() {
+      sheet.setAttribute('hidden', '');
+      backdrop.setAttribute('hidden', '');
+    }
+    if (prefersReduced) {
+      finish();
+    } else {
+      setTimeout(finish, 300);
+    }
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+  }
+
+  // ── Expose open/close for address sub-sheet ────────────────
+  sheet._open = openSheet;
+  sheet._close = closeSheet;
+  Object.defineProperty(sheet, '_addressSaved', {
+    get: function() { return addressSaved; },
+    set: function(v) { addressSaved = v; }
+  });
+
+  // ── Wire open triggers ─────────────────────────────────────
+  openBtns.forEach(function(btn) {
+    btn.addEventListener('click', openSheet);
+  });
+
+  // ── Wire close triggers ────────────────────────────────────
+  closeBtns.forEach(function(btn) {
+    btn.addEventListener('click', closeSheet);
+  });
+  backdrop.addEventListener('click', function() {
+    // Only close if address sheet is NOT open
+    var addrSheet = document.getElementById('address-sheet');
+    if (addrSheet && addrSheet.classList.contains('open')) return;
+    closeSheet();
+  });
+
+  // ── ESC ────────────────────────────────────────────────────
+  document.addEventListener('keydown', function(e) {
+    if (e.key !== 'Escape') return;
+    var addrSheet = document.getElementById('address-sheet');
+    // If address sheet is open, let address controller handle ESC
+    if (addrSheet && addrSheet.classList.contains('open')) return;
+    if (sheet.classList.contains('open')) closeSheet();
+  });
+
+  // ── Focus trap ─────────────────────────────────────────────
+  sheet.addEventListener('keydown', function(e) {
+    if (e.key !== 'Tab') return;
+    var addrSheet = document.getElementById('address-sheet');
+    if (addrSheet && addrSheet.classList.contains('open')) return;
+    var focusable = getFocusable();
+    if (!focusable.length) { e.preventDefault(); return; }
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  // ── Quantity stepper ───────────────────────────────────────
+  var lineEl = document.getElementById('checkout-line-total');
+  var footerTotalEl = document.getElementById('checkout-footer-total');
+  var mainTotalEl = document.getElementById('checkout-total-display');
+  var origDisplayEl = document.getElementById('checkout-orig-display');
+  var couponDisplayEl = document.getElementById('checkout-coupon-display');
+  var discountDisplayEl = document.getElementById('checkout-discount-display');
+  var qtyInput = sheet.querySelector('.checkout-qty-input');
+  var btnDec = sheet.querySelector('.checkout-qty-btn[data-action="dec"]');
+  var btnInc = sheet.querySelector('.checkout-qty-btn[data-action="inc"]');
+
+  function getQty() { return Math.max(1, parseInt(qtyInput ? qtyInput.value : 1, 10) || 1); }
+
+  function updateTotals(qty) {
+    if (!lineEl) return;
+    var unitPrice = parseFloat(lineEl.dataset.unitPrice) || 0;
+    var origPrice = parseFloat(lineEl.dataset.origPrice) || unitPrice;
+    var discAmt = parseFloat(lineEl.dataset.discountAmt) || 0;
+    var currency = lineEl.dataset.currency || '₫';
+
+    var lineTotal = unitPrice * qty;
+    var origTotal = origPrice * qty;
+    var discTotal = discAmt * qty;
+
+    function fmt(n) { return Number(n).toLocaleString('vi-VN') + currency; }
+
+    if (lineEl) lineEl.textContent = fmt(lineTotal);
+    if (footerTotalEl) footerTotalEl.textContent = fmt(lineTotal);
+    if (mainTotalEl) mainTotalEl.textContent = fmt(lineTotal);
+    if (origDisplayEl) origDisplayEl.textContent = fmt(origTotal);
+    if (couponDisplayEl) couponDisplayEl.textContent = '−' + fmt(discTotal);
+    if (discountDisplayEl) discountDisplayEl.textContent = '−' + fmt(discTotal);
+  }
+
+  function setQty(val) {
+    var v = Math.max(1, val);
+    if (qtyInput) qtyInput.value = v;
+    if (btnDec) btnDec.disabled = v <= 1;
+    updateTotals(v);
+  }
+
+  if (qtyInput && btnDec && btnInc) {
+    btnDec.addEventListener('click', function() { setQty(getQty() - 1); });
+    btnInc.addEventListener('click', function() { setQty(getQty() + 1); });
+    qtyInput.addEventListener('change', function() { setQty(getQty()); });
+    setQty(1);
+  }
+
+  // ── Payment radio (visual selected state) ─────────────────
+  var paymentRadios = sheet.querySelectorAll('.checkout-payment-radio');
+  paymentRadios.forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      var allOptions = sheet.querySelectorAll('.checkout-payment-option');
+      allOptions.forEach(function(opt) { opt.classList.remove('is-selected'); });
+      var parentOpt = radio.closest('.checkout-payment-option');
+      if (parentOpt) parentOpt.classList.add('is-selected');
+    });
+  });
+  // Set initial state for COD
+  (function() {
+    var codRadio = sheet.querySelector('.checkout-payment-radio[value="cod"]');
+    if (codRadio) {
+      var parentOpt = codRadio.closest('.checkout-payment-option');
+      if (parentOpt) parentOpt.classList.add('is-selected');
+    }
+  })();
+
+  // ── Place order ────────────────────────────────────────────
+  var placeOrderBtn = document.getElementById('checkout-place-order-btn');
+  var addressHintEl = document.getElementById('checkout-address-hint');
+  var successEl = document.getElementById('checkout-success');
+  var footerEl = document.getElementById('checkout-footer');
+
+  if (placeOrderBtn) {
+    placeOrderBtn.addEventListener('click', function() {
+      var qty = getQty();
+
+      // Show address hint if no address saved (allow-with-hint per D7)
+      if (!addressSaved && addressHintEl) {
+        addressHintEl.removeAttribute('hidden');
+      }
+
+      // Show success state
+      if (successEl) successEl.removeAttribute('hidden');
+      if (footerEl) footerEl.style.display = 'none';
+
+      // Fire Purchase tracking event
+      if (lineEl) {
+        var productId = lineEl.dataset.productId || '';
+        var productName = lineEl.dataset.productName || '';
+        var unitPrice = parseFloat(lineEl.dataset.unitPrice) || 0;
+        var currency = lineEl.dataset.currency || 'VND';
+        var value = unitPrice * qty;
+        if (typeof trackEvent === 'function') {
+          trackEvent('Purchase', {
+            content_ids: [productId],
+            content_name: productName,
+            value: value,
+            currency: currency,
+            num_items: qty,
+          });
+        }
+      }
+    });
+  }
+
+  // ── Reset on close (so re-opening shows fresh state) ──────
+  function resetSheet() {
+    if (successEl) successEl.setAttribute('hidden', '');
+    if (addressHintEl) addressHintEl.setAttribute('hidden', '');
+    if (footerEl) footerEl.style.display = '';
+    setQty(1);
+  }
+
+  var originalClose = closeSheet;
+  sheet._closeAndReset = function() {
+    originalClose();
+    setTimeout(resetSheet, 350);
+  };
+
+  // Patch close to reset
+  closeBtns.forEach(function(btn) {
+    btn.removeEventListener('click', closeSheet);
+    btn.addEventListener('click', function() { originalClose(); setTimeout(resetSheet, 350); });
+  });
+})();
+
+/* ════════════════════════════════════════════════════════════
+   SECTION 13b – Add-address sub-sheet
+   Opens from the order sheet's address card. Stacks above the order
+   sheet (--z-modal-2 / --z-backdrop-2). Inerts BOTH .page-wrapper
+   and the order sheet while open. ESC / backdrop / close dismisses
+   ONLY this sub-sheet; order sheet stays open.
+   ════════════════════════════════════════════════════════════ */
+(function initAddressSheet() {
+  var addrSheet = document.getElementById('address-sheet');
+  var addrBackdrop = document.getElementById('address-backdrop');
+  var orderSheet = document.getElementById('checkout-sheet');
+  var addrCard = document.getElementById('checkout-address-card');
+
+  if (!addrSheet || !addrBackdrop || !orderSheet || !addrCard) return;
+
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var lastFocused = null;
+  var isDefaultAddr = false;
+
+  // ── Portal ─────────────────────────────────────────────────
+  if (addrBackdrop.parentElement !== document.body) document.body.appendChild(addrBackdrop);
+  if (addrSheet.parentElement !== document.body) document.body.appendChild(addrSheet);
+
+  // ── Focusable helper ───────────────────────────────────────
+  function getFocusable() {
+    return Array.from(addrSheet.querySelectorAll(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter(function(el) {
+      return !el.closest('[hidden]') && el.offsetParent !== null;
+    });
+  }
+
+  // ── Open / close ───────────────────────────────────────────
+  function openAddrSheet() {
+    lastFocused = document.activeElement;
+    addrSheet.removeAttribute('hidden');
+    addrBackdrop.removeAttribute('hidden');
+    void addrSheet.offsetWidth;
+    addrSheet.classList.add('open');
+    addrBackdrop.classList.add('open');
+    // Inert both background and order sheet
+    var wrapper = document.querySelector('.page-wrapper');
+    if (wrapper) { wrapper.setAttribute('aria-hidden', 'true'); wrapper.inert = true; }
+    orderSheet.setAttribute('aria-hidden', 'true');
+    orderSheet.inert = true;
+    var focusable = getFocusable();
+    if (focusable.length) focusable[0].focus();
+  }
+
+  function closeAddrSheet() {
+    addrSheet.classList.remove('open');
+    addrBackdrop.classList.remove('open');
+    // Un-inert order sheet (page-wrapper stays inert because order sheet is still open)
+    orderSheet.removeAttribute('aria-hidden');
+    orderSheet.inert = false;
+    function finish() {
+      addrSheet.setAttribute('hidden', '');
+      addrBackdrop.setAttribute('hidden', '');
+    }
+    if (prefersReduced) {
+      finish();
+    } else {
+      setTimeout(finish, 300);
+    }
+    // Return focus to the address card (trigger button in the order sheet)
+    if (lastFocused && typeof lastFocused.focus === 'function') {
+      lastFocused.focus();
+    } else if (addrCard) {
+      addrCard.focus();
+    }
+  }
+
+  // ── Wire triggers ──────────────────────────────────────────
+  addrCard.addEventListener('click', openAddrSheet);
+
+  var closeBtns = addrSheet.querySelectorAll('.address-close-btn');
+  closeBtns.forEach(function(btn) {
+    btn.addEventListener('click', closeAddrSheet);
+  });
+
+  addrBackdrop.addEventListener('click', closeAddrSheet);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && addrSheet.classList.contains('open')) {
+      e.stopPropagation(); // stop bubbling so the checkout sheet's keydown handler doesn't also fire
+      closeAddrSheet();
+    }
+  });
+
+  // ── Focus trap ─────────────────────────────────────────────
+  addrSheet.addEventListener('keydown', function(e) {
+    if (e.key !== 'Tab') return;
+    var focusable = getFocusable();
+    if (!focusable.length) { e.preventDefault(); return; }
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  // ── Form references ────────────────────────────────────────
+  var nameInput = document.getElementById('addr-name');
+  var phoneInput = document.getElementById('addr-phone');
+  var phoneError = document.getElementById('addr-phone-error');
+  var saveBtn = document.getElementById('address-save-btn');
+  var defaultToggle = document.getElementById('addr-default-toggle');
+  var addrSelectRow = document.getElementById('addr-select');
+  var addrDetailInput = document.getElementById('addr-detail');
+  var useLocationBtn = addrSheet.querySelector('.address-use-location-btn');
+
+  // ── VN phone validation ────────────────────────────────────
+  // 9–10 digits after +84 country code, first digit in {3,5,7,8,9}
+  function isValidVNPhone(value) {
+    var digits = value.replace(/\D/g, '');
+    return /^[35789]\d{8,9}$/.test(digits);
+  }
+
+  function updateSaveBtn() {
+    var nameOk = nameInput && nameInput.value.trim() !== '';
+    var phoneOk = phoneInput && isValidVNPhone(phoneInput.value);
+    var enabled = nameOk && phoneOk;
+    if (saveBtn) {
+      saveBtn.disabled = !enabled;
+      saveBtn.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+    }
+  }
+
+  function validatePhone() {
+    if (!phoneInput || !phoneError) return;
+    var val = phoneInput.value.trim();
+    if (val === '') {
+      phoneError.setAttribute('hidden', '');
+      return;
+    }
+    if (!isValidVNPhone(val)) {
+      phoneError.removeAttribute('hidden');
+    } else {
+      phoneError.setAttribute('hidden', '');
+    }
+  }
+
+  if (nameInput) {
+    nameInput.addEventListener('input', updateSaveBtn);
+    nameInput.addEventListener('blur', updateSaveBtn);
+  }
+  if (phoneInput) {
+    phoneInput.addEventListener('input', function() { validatePhone(); updateSaveBtn(); });
+    phoneInput.addEventListener('blur', function() { validatePhone(); updateSaveBtn(); });
+  }
+
+  // ── Default toggle ─────────────────────────────────────────
+  if (defaultToggle) {
+    defaultToggle.addEventListener('click', function() {
+      isDefaultAddr = !isDefaultAddr;
+      defaultToggle.setAttribute('aria-checked', isDefaultAddr ? 'true' : 'false');
+      defaultToggle.classList.toggle('is-on', isDefaultAddr);
+    });
+  }
+
+  // ── Use current location (mock) ────────────────────────────
+  if (useLocationBtn) {
+    useLocationBtn.addEventListener('click', function() {
+      if (addrSelectRow) {
+        var placeholder = addrSelectRow.querySelector('.address-select-placeholder');
+        if (placeholder) placeholder.textContent = 'Hà Nội, Hoàn Kiếm, Phố Tràng Tiền';
+        addrSelectRow.classList.add('has-value');
+      }
+    });
+  }
+
+  // ── Save address ───────────────────────────────────────────
+  if (saveBtn) {
+    saveBtn.addEventListener('click', function() {
+      if (saveBtn.disabled) return;
+
+      var name = nameInput ? nameInput.value.trim() : '';
+      var phone = phoneInput ? phoneInput.value.trim() : '';
+      var addrPlaceholder = addrSelectRow
+        ? (addrSelectRow.querySelector('.address-select-placeholder') || {}).textContent || ''
+        : '';
+      var detail = addrDetailInput ? addrDetailInput.value.trim() : '';
+      var addrText = [addrPlaceholder, detail].filter(Boolean).join(', ') || 'Địa chỉ đã lưu';
+
+      // Update order sheet's address card
+      var addrDisplay = document.getElementById('checkout-address-display');
+      if (addrDisplay) {
+        addrDisplay.innerHTML =
+          '<div class="checkout-address-saved">' +
+            '<div class="checkout-address-name-phone">' +
+              '<span class="checkout-address-name">' + name + '</span>' +
+              '<span class="checkout-address-phone">+84 ' + phone.replace(/\D/g, '') + '</span>' +
+            '</div>' +
+            '<div class="checkout-address-street">' + addrText + '</div>' +
+          '</div>';
+      }
+
+      // Mark address saved on the order sheet element (for place-order logic)
+      if (orderSheet) orderSheet._addressSaved = true;
+
+      closeAddrSheet();
+    });
+  }
+
+  // ── Initial save-button state ──────────────────────────────
+  updateSaveBtn();
+})();
+
+/* ════════════════════════════════════════════════════════════
    SECTION 5 – Review filter tabs
    ════════════════════════════════════════════════════════════ */
 (function initReviewControls() {
