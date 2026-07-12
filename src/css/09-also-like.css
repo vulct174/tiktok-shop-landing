@@ -1,0 +1,163 @@
+/* ════════════════════════════════════════════════════════════
+   SECTION 9 – You May Also Like (2-column grid)
+   ════════════════════════════════════════════════════════════ */
+.also-like-section {
+  background: var(--bg);
+  padding: 14px;
+  border-bottom: 8px solid var(--bg);
+}
+
+.also-like-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.also-like-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.also-like-card {
+  background: var(--surface);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.also-like-card-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f8f8f8;
+}
+
+.also-like-card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.also-like-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+}
+
+.also-like-badge.badge-deal {
+  background: var(--accent);
+  color: #fff;
+}
+
+.also-like-badge.badge-xu-huong {
+  background: #ff6b00;
+  color: #fff;
+}
+
+.also-like-badge.badge-hang-viet {
+  background: var(--badge-vn-bg);
+  color: var(--badge-vn-text);
+}
+
+.also-like-card-info {
+  padding: 8px 8px 10px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.also-like-card-name {
+  font-size: 13px;
+  font-weight: 400;
+  color: #000;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.also-like-card-flash {
+  margin-bottom: 6px;
+}
+
+.also-like-card-flash-label {
+  color: #ff576f;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.also-like-card-rating {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.also-like-card-rating .s-star {
+  color: var(--star-gold);
+  margin-right: 2px;
+}
+
+.also-like-rating-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: #000;
+  margin-right: 2px;
+}
+
+.also-like-card-divider {
+  display: inline-block;
+  width: 1px;
+  height: 8px;
+  background: rgba(0,0,0,0.12);
+  margin: 0 4px;
+}
+
+.also-like-card-sold {
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(0,0,0,0.48);
+}
+
+.also-like-card-price-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  gap: 4px;
+}
+
+.also-like-card-currency {
+  font-size: 13px;
+  font-weight: 600;
+  color: #000;
+}
+
+.also-like-card-price-num {
+  font-size: 17px;
+  font-weight: 600;
+  color: #000;
+  margin-right: 4px;
+}
+
+.also-like-card-orig {
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(0,0,0,0.48);
+  text-decoration: line-through;
+}
+

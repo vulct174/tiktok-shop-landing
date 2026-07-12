@@ -1,0 +1,107 @@
+/* ============================================================
+   TikTok Shop Landing Page – Design System
+   Mobile-first, max-width 430px, centered on desktop
+   ============================================================ */
+
+/* ── CSS Variables ── */
+:root {
+  /* Colors */
+  --accent: #FE2C55;
+  --accent-hover: #E01E45;
+  --accent-light: #FFF0F2;
+  --bg: #F5F5F5;
+  --surface: #ffffff;
+  --text-primary: #161823;
+  --text-secondary: #666666;
+  /* #8A8B91 (reference muted) fails WCAG AA on white for small text; #767676 is the minimum AA-passing gray */
+  --text-muted-safe: #767676;
+  --text-light: #ffffff;
+  --star-gold: #FFC233;
+  --verified-blue: #1976d2;
+  --badge-flash: #ff4500;
+  --badge-vn-bg: #e8f5e9;
+  --badge-vn-text: #2e7d32;
+  --border: #e8e8e8;
+  /* Shadows */
+  --shadow-card: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-nav: 0 2px 8px rgba(0,0,0,0.12);
+  --shadow-cta: 0 -4px 16px rgba(254,44,85,0.25);
+  --shadow-modal: 0 -8px 32px rgba(0,0,0,0.18);
+  /* Radius */
+  --radius-pill: 999px;
+  --radius-card: 12px;
+  --radius-sm: 8px;
+  --radius-xs: 4px;
+  /* Spacing */
+  --top-nav-height: 52px;
+  --sticky-cta-height: 64px;
+  --max-w: 430px;
+  /* Z-index */
+  --z-nav: 200;
+  --z-backdrop: 299;
+  --z-modal: 300;
+  --z-backdrop-2: 399;
+  --z-modal-2: 400;
+  --z-lightbox: 500;
+  /* Deal / checkout tokens */
+  --deal-teal: #12B0A0;
+  --deal-teal-bg: #E7F7F5;
+  --toggle-cyan: #25C4CC;
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  /* Reserve bottom for sticky CTA and top for sticky nav */
+  padding-bottom: var(--sticky-cta-height);
+  padding-top: var(--top-nav-height);
+}
+
+/* ── Layout wrapper – centers content on desktop ── */
+.page-wrapper {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  background: var(--surface);
+  position: relative;
+}
+
+/* ── Utility ── */
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  background: none;
+  font-family: inherit;
+}
+

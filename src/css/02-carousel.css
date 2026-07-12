@@ -1,0 +1,160 @@
+/* ════════════════════════════════════════════════════════════
+   SECTION 2 – Hero Swipe Carousel
+   ════════════════════════════════════════════════════════════ */
+.hero-carousel {
+  position: relative;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.hero-slides {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  user-select: none;
+}
+
+.hero-slides.is-grabbing {
+  cursor: grabbing;
+}
+
+.hero-slides::-webkit-scrollbar {
+  display: none;
+}
+
+.hero-slide {
+  flex-shrink: 0;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  scroll-snap-align: start;
+  overflow: hidden;
+}
+
+.hero-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* Counter overlay */
+.hero-counter {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 4px;
+  border-radius: 2px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-counter.hidden {
+  display: none;
+}
+
+/* Arrow buttons */
+.hero-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  border: none;
+  padding: 0;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.hero-arrow:hover {
+  background: rgba(0,0,0,0.65);
+}
+
+.hero-arrow:active {
+  background: rgba(0,0,0,0.8);
+}
+
+.hero-arrow:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.hero-arrow-prev {
+  left: 8px;
+}
+
+.hero-arrow-next {
+  right: 8px;
+}
+
+/* Dots indicator */
+.hero-dots {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.hero-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+
+.hero-dot.is-active {
+  background: #fff;
+  transform: scale(1.4);
+}
+
+.hero-dot:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-arrow {
+    transition: none;
+  }
+  .hero-dot {
+    transition: none;
+  }
+}
+
+/* Shared badge pill (used by catalog cards and other sections) */
+.badge {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--text-light);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.3px;
+}
+

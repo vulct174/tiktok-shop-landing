@@ -1,0 +1,201 @@
+/* ════════════════════════════════════════════════════════════
+   Index catalog page
+   ════════════════════════════════════════════════════════════ */
+
+/* Catalog page body: override body padding since nav is inside wrapper */
+body:has(.catalog-page) {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Catalog page wrapper: no bottom padding (no sticky CTA) */
+.catalog-page {
+  padding-bottom: 0;
+}
+
+/* Catalog nav: same structure as product page top-nav but static */
+.catalog-nav {
+  position: sticky;
+  top: 0;
+  left: 0;
+  transform: none;
+  width: 100%;
+  max-width: var(--max-w);
+  box-shadow: var(--shadow-nav);
+}
+
+.catalog-header {
+  background: var(--surface);
+  padding: 14px 14px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.catalog-header-inner {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.catalog-header h1 {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.catalog-header p {
+  font-size: 12px;
+  color: var(--text-muted-safe);
+  margin: 0;
+}
+
+.catalog-grid {
+  padding: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  background: var(--bg);
+}
+
+.catalog-card {
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s;
+}
+
+.catalog-card:active {
+  transform: scale(0.97);
+}
+
+.catalog-card-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f8f8f8;
+}
+
+.catalog-card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.catalog-card-discount {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+}
+
+.catalog-card-body {
+  padding: 8px 8px 10px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.catalog-card-name {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 6px;
+  flex: 1;
+}
+
+.catalog-card-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.catalog-card-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.catalog-card-orig {
+  font-size: 11px;
+  color: var(--text-muted-safe);
+  text-decoration: line-through;
+}
+
+.catalog-card-sold {
+  font-size: 11px;
+  color: var(--text-muted-safe);
+  margin-top: 4px;
+}
+
+.catalog-footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 16px 14px;
+  text-align: center;
+}
+
+.catalog-footer-brand {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.catalog-footer-copy {
+  font-size: 11px;
+  color: var(--text-muted-safe);
+}
+
+/* ── Inline SVG Icons ── */
+.nav-logo-img {
+  height: 31px;
+  width: 80px;
+  flex-shrink: 0;
+  vertical-align: middle;
+  object-fit: contain;
+}
+
+
+
+/* Inline SVGs inherit size from font-size context */
+.nav-btn svg,
+.nav-search-icon svg,
+.select-options-chevron svg,
+.about-chevron svg,
+.footer-group-chevron svg,
+.footer-perk-icon svg,
+.seller-line svg,
+.breakdown-star svg,
+.reviews-score-star svg,
+.review-verified svg,
+.s-star svg,
+.rating-stars svg,
+.review-photo-stars svg,
+.review-card-stars svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+}
+
+/* Narrow chevron override: 8px wide × 16px tall (0.5em × 1em at 16px font-size).
+   Same specificity as the global rule above but placed later, so it wins. */
+.select-options-chevron svg {
+  width: 0.5em;
+  height: 1em;
+}
+

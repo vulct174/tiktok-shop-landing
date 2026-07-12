@@ -1,0 +1,33 @@
+/* ════════════════════════════════════════════════════════════
+   SECTION 10 – Breadcrumb
+   ════════════════════════════════════════════════════════════ */
+.breadcrumb-section {
+  background: var(--surface);
+  padding: 10px 14px;
+  border-bottom: 8px solid var(--bg);
+}
+
+.breadcrumb-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-muted-safe);
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.breadcrumb-item:last-child {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.breadcrumb-sep {
+  color: var(--border);
+}
+

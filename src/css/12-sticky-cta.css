@@ -1,0 +1,75 @@
+/* ════════════════════════════════════════════════════════════
+   SECTION 12 – Sticky Bottom CTA
+   ════════════════════════════════════════════════════════════ */
+.sticky-cta-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--max-w);
+  height: var(--sticky-cta-height);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  gap: 6px;
+  z-index: var(--z-nav);
+  box-shadow: var(--shadow-cta);
+}
+
+/* Left cluster: Shop + Chat icon-label buttons — removed */
+
+/* Buy-now pill: fills full width */
+.cta-buy-now {
+  flex: 1;
+  height: 48px;
+  background: var(--accent);
+  color: var(--text-light);
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  min-width: 0;
+  gap: 1px;
+}
+
+.cta-buy-now:hover {
+  background: var(--accent-hover);
+}
+
+.cta-buy-now:active {
+  transform: scale(0.98);
+  background: var(--accent-hover);
+}
+
+.cta-buy-now-label {
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.2px;
+}
+
+.cta-buy-now-price {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  opacity: 0.92;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Thin divider between price and "Miễn phí vận chuyển" */
+.cta-buy-now-sep {
+  display: inline-block;
+  margin: 0 5px;
+  opacity: 0.6;
+  font-weight: 400;
+}
+

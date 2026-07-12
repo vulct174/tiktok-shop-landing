@@ -1,0 +1,130 @@
+/* ════════════════════════════════════════════════════════════
+   SECTION 11 – Accordion Footer
+   ════════════════════════════════════════════════════════════ */
+.page-footer {
+  background: #ffffff;
+  border-top: 1px solid var(--border);
+  padding: 40px 16px;
+}
+
+.footer-logo {
+  height: 30px;
+  width: auto;
+  display: block;
+  margin-bottom: 24px;
+  object-fit: contain;
+}
+
+.footer-group {
+  border-bottom: 1px solid var(--border);
+}
+
+.footer-group-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 14px;
+  min-height: 52px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.footer-group-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.footer-group-chevron {
+  font-size: 12px;
+  color: var(--text-muted-safe);
+  transition: transform 0.25s;
+  flex-shrink: 0;
+}
+
+.footer-group-toggle[aria-expanded="true"] .footer-group-chevron {
+  transform: rotate(180deg);
+}
+
+.footer-group-content {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+}
+
+.footer-group-content.expanded {
+  max-height: 500px;
+}
+
+.footer-group-links {
+  padding: 0 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-group-links a {
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: block;
+}
+
+/* Free shipping + new customer row */
+.footer-perks-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 14px;
+  border-bottom: 1px solid var(--border);
+  background: #fafafa;
+}
+
+.footer-perk {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.footer-perk-icon {
+  font-size: 20px;
+}
+
+.footer-perk-label {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* App badges */
+.footer-badges-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.footer-badge-link img {
+  height: 36px;
+  width: auto;
+  display: inline-block;
+}
+
+/* Footer copyright */
+.footer-copy {
+  padding: 14px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted-safe);
+  line-height: 1.7;
+}
+

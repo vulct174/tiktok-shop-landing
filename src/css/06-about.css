@@ -1,0 +1,102 @@
+/* ════════════════════════════════════════════════════════════
+   SECTION 6 – About This Product (collapsible)
+   ════════════════════════════════════════════════════════════ */
+.about-section {
+  background: var(--surface);
+  border-bottom: 8px solid var(--bg);
+  padding: 8px 16px;
+}
+
+.about-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #202020;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.about-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.about-toggle-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #202020;
+}
+
+.about-chevron {
+  font-size: 16px;
+  color: var(--text-secondary);
+  transition: transform 0.25s;
+  flex-shrink: 0;
+}
+
+.about-toggle[aria-expanded="true"] .about-chevron {
+  transform: rotate(180deg);
+}
+
+.about-content {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.35s ease;
+}
+
+.about-content.expanded {
+  max-height: 9999px;
+}
+
+.about-inner {
+  padding: 0 0 8px;
+}
+
+.about-description {
+  font-size: 11px;
+  line-height: 1.5;
+  color: #000;
+  margin-bottom: 8px;
+}
+
+.about-description p {
+  margin-bottom: 8px;
+}
+
+.about-description ul {
+  list-style: disc;
+  padding-left: 18px;
+  margin-bottom: 10px;
+}
+
+.about-description li {
+  margin-bottom: 5px;
+  color: #000;
+}
+
+.about-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.about-gallery img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.about-description img {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  display: block;
+}
+
