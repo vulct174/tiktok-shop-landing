@@ -1,9 +1,52 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
-  <rect width="800" height="800" fill="#fff5f5"/>
-  <rect x="50" y="50" width="700" height="700" fill="#fadbd8" rx="20"/>
-  <text x="400" y="340" font-family="Arial, sans-serif" font-size="44" fill="#e74c3c" text-anchor="middle" font-weight="bold">Loa Bluetooth</text>
-  <text x="400" y="400" font-family="Arial, sans-serif" font-size="36" fill="#e74c3c" text-anchor="middle">Chống Nước IPX7</text>
-  <text x="400" y="480" font-family="Arial, sans-serif" font-size="28" fill="#f1948a" text-anchor="middle">360° Sound - Sản Phẩm #6</text>
-  <circle cx="400" cy="220" r="80" fill="#e74c3c" opacity="0.3"/>
-  <text x="400" y="235" font-family="Arial, sans-serif" font-size="60" fill="#7b241c" text-anchor="middle">🔊</text>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5F5F5"/>
+      <stop offset="100%" stop-color="#E8E8E8"/>
+    </linearGradient>
+    <radialGradient id="speakerGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3A3A3A"/>
+      <stop offset="100%" stop-color="#1A1A1A"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="800" fill="url(#bg)"/>
+  <!-- Floor shadow -->
+  <ellipse cx="400" cy="580" rx="120" ry="18" fill="#CCC" opacity="0.5"/>
+  <!-- Speaker body (cylindrical) -->
+  <rect x="300" y="280" width="200" height="300" rx="100" fill="url(#speakerGrad)"/>
+  <!-- Mesh grille texture (horizontal lines) -->
+  <line x1="310" y1="320" x2="490" y2="320" stroke="#444" stroke-width="1" opacity="0.5"/>
+  <line x1="305" y1="340" x2="495" y2="340" stroke="#444" stroke-width="1" opacity="0.5"/>
+  <line x1="302" y1="360" x2="498" y2="360" stroke="#444" stroke-width="1" opacity="0.5"/>
+  <line x1="300" y1="380" x2="500" y2="380" stroke="#444" stroke-width="1" opacity="0.5"/>
+  <line x1="300" y1="400" x2="500" y2="400" stroke="#444" stroke-width="1" opacity="0.5"/>
+  <line x1="300" y1="420" x2="500" y2="420" stroke="#444" stroke-width="1" opacity="0.5"/>
+  <line x1="300" y1="440" x2="500" y2="440" stroke="#444" stroke-width="1" opacity="0.5"/>
+  <line x1="300" y1="460" x2="500" y2="460" stroke="#444" stroke-width="1" opacity="0.5"/>
+  <line x1="300" y1="480" x2="500" y2="480" stroke="#444" stroke-width="1" opacity="0.5"/>
+  <line x1="302" y1="500" x2="498" y2="500" stroke="#444" stroke-width="1" opacity="0.5"/>
+  <line x1="305" y1="520" x2="495" y2="520" stroke="#444" stroke-width="1" opacity="0.5"/>
+  <line x1="310" y1="540" x2="490" y2="540" stroke="#444" stroke-width="1" opacity="0.5"/>
+  <!-- Driver cone visible through mesh -->
+  <circle cx="400" cy="420" r="60" fill="#222" stroke="#333" stroke-width="2"/>
+  <circle cx="400" cy="420" r="40" fill="#2A2A2A" stroke="#383838" stroke-width="1.5"/>
+  <circle cx="400" cy="420" r="15" fill="#333"/>
+  <circle cx="400" cy="420" r="8" fill="#FE2C55" opacity="0.8"/>
+  <!-- Top control area -->
+  <ellipse cx="400" cy="280" rx="80" ry="20" fill="#2A2A2A"/>
+  <!-- Power button -->
+  <circle cx="400" cy="280" r="10" fill="#333" stroke="#555" stroke-width="1.5"/>
+  <circle cx="400" cy="280" r="4" fill="#FE2C55"/>
+  <!-- Sound waves -->
+  <path d="M520 370 Q540 390 520 420 Q540 450 520 470" fill="none" stroke="#FE2C55" stroke-width="2.5" opacity="0.4" stroke-linecap="round"/>
+  <path d="M540 355 Q565 390 540 430 Q565 470 540 490" fill="none" stroke="#FE2C55" stroke-width="2" opacity="0.25" stroke-linecap="round"/>
+  <path d="M280 370 Q260 390 280 420 Q260 450 280 470" fill="none" stroke="#FE2C55" stroke-width="2.5" opacity="0.4" stroke-linecap="round"/>
+  <path d="M260 355 Q235 390 260 430 Q235 470 260 490" fill="none" stroke="#FE2C55" stroke-width="2" opacity="0.25" stroke-linecap="round"/>
+  <!-- IPX7 water drops -->
+  <circle cx="540" cy="530" r="5" fill="#4FC3F7" opacity="0.5"/>
+  <circle cx="555" cy="545" r="4" fill="#4FC3F7" opacity="0.4"/>
+  <circle cx="530" cy="550" r="3" fill="#4FC3F7" opacity="0.3"/>
+  <!-- Accent badge -->
+  <rect x="530" y="155" width="130" height="34" rx="17" fill="#FE2C55"/>
+  <text x="595" y="177" font-family="Arial, sans-serif" font-size="13" fill="#FFF" text-anchor="middle" font-weight="bold">IPX7 360</text>
 </svg>

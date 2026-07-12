@@ -1253,18 +1253,23 @@ function renderCatalogIndex(products, site) {
     const thumb = p.thumb || (Array.isArray(p.images) && p.images[0]) || '';
     const pct   = discountPct(p.price, p.originalPrice);
     const discountTag = pct > 0
-      ? `<span class="badge" style="position:static;display:inline-block;margin-top:4px;">-${pct}%</span>`
+      ? `<span class="catalog-card-discount">-${pct}%</span>`
+      : '';
+    const soldHtml = p.sold
+      ? `<div class="catalog-card-sold">${formatPrice(p.sold)} đã bán</div>`
       : '';
     return `  <a class="catalog-card" href="${esc(p.slug)}.html" aria-label="${esc(p.name)}">
     <div class="catalog-card-img-wrap">
       <img src="${esc(`${imgBaseDir}/${thumb}`)}" alt="${esc(p.name)}" loading="lazy">
+      ${discountTag}
     </div>
     <div class="catalog-card-body">
       <div class="catalog-card-name">${esc(p.name)}</div>
-      <div class="catalog-card-price">${formatPrice(p.price)}${esc(currency)}</div>
-      ${p.originalPrice ? `<div class="catalog-card-orig">${formatPrice(p.originalPrice)}${esc(currency)}</div>` : ''}
-      ${discountTag}
-      <span class="catalog-card-cta">Xem ngay</span>
+      <div class="catalog-card-price-row">
+        <span class="catalog-card-price">${formatPrice(p.price)}${esc(currency)}</span>
+        ${p.originalPrice ? `<span class="catalog-card-orig">${formatPrice(p.originalPrice)}${esc(currency)}</span>` : ''}
+      </div>
+      ${soldHtml}
     </div>
   </a>`;
   }).join('\n');
@@ -1278,17 +1283,29 @@ function renderCatalogIndex(products, site) {
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="page-wrapper">
+  <div class="page-wrapper catalog-page">
+    <nav class="top-nav catalog-nav" aria-label="Điều hướng chính">
+      <div class="nav-left-group">
+        <img src="${imgBaseDir}/tts-logo-light.png" alt="TikTok Shop Vietnam" class="nav-logo-img">
+      </div>
+      <div class="nav-search" role="search" aria-label="Tìm kiếm sản phẩm">
+        <span class="nav-search-icon" aria-hidden="true">${iconSearch()}</span>
+        <span class="nav-search-placeholder">Tìm kiếm</span>
+      </div>
+      <button class="nav-btn nav-cart-btn" aria-label="Giỏ hàng" type="button">${iconCart()}</button>
+    </nav>
     <header class="catalog-header">
-      <h1>${esc(site.brand)}</h1>
-      <p>Danh mục sản phẩm – ${products.length} sản phẩm</p>
+      <div class="catalog-header-inner">
+        <h1>${esc(site.brand)}</h1>
+        <p>${products.length} sản phẩm</p>
+      </div>
     </header>
     <main class="catalog-grid">
 ${cards}
     </main>
     <footer class="catalog-footer">
-      <div>${esc(site.brand)}</div>
-      <div>© ${new Date().getFullYear()} ${esc(site.brand)}. Bảo lưu mọi quyền.</div>
+      <div class="catalog-footer-brand">${esc(site.brand)}</div>
+      <div class="catalog-footer-copy">&copy; ${new Date().getFullYear()} ${esc(site.brand)}. Bảo lưu mọi quyền.</div>
     </footer>
   </div>
 </body>
@@ -1299,7 +1316,7 @@ ${cards}
 // PAGE ASSEMBLER
 // ════════════════════════════════════════════════════════════
 
-function assemblePage(product, allProducts, site, tracking, templateHtml, sellerShelf) {
+function assemblePage(product, allProducts, site, tracking, templateHtml, sellerShelf, checkout) {
   const currency   = site.currency || '₫';
   const imgBaseDir = site.imageBaseDir || 'assets/products';
 
@@ -1344,6 +1361,9 @@ function assemblePage(product, allProducts, site, tracking, templateHtml, seller
     slug:     product.slug,
   }).replace(/<\//g, '<\\/');
 
+  // Checkout config JSON for order submission
+  const checkoutConfigRaw = JSON.stringify(checkout || {}).replace(/<\//g, '<\\/');
+
   // Substitute template tokens
   let html = templateHtml;
   html = html.replace('{{PAGE_TITLE}}',       esc(product.name) + ' – ' + esc(site.brand));
@@ -1353,6 +1373,7 @@ function assemblePage(product, allProducts, site, tracking, templateHtml, seller
   const ogImg = product.thumb || (Array.isArray(product.images) && product.images[0]) || '';
   html = html.replace('{{OG_IMAGE}}',         esc(`${imgBaseDir}/${ogImg}`));
   html = html.replace('{{PRODUCT_JSON}}',     productJsonRaw);
+  html = html.replace('{{CHECKOUT_CONFIG_JSON}}', checkoutConfigRaw);
   html = html.replace('{{PRELOAD_LCP}}',      preloadLcp);
 
   // Section substitution (12 sections)
@@ -1386,13 +1407,14 @@ async function build() {
 
   // ── Load config via pathToFileURL (Windows-safe ESM import) ──
   const configUrl = pathToFileURL(CONFIG).href;
-  let site, tracking, products, sellerShelf;
+  let site, tracking, products, sellerShelf, checkout;
   try {
     const config = await import(configUrl);
     site        = config.site;
     tracking    = config.tracking;
     products    = config.products;
     sellerShelf = config.sellerShelf;
+    checkout    = config.checkout || {};
   } catch (err) {
     console.error('Failed to import config:', err.message);
     process.exit(1);
@@ -1429,7 +1451,7 @@ async function build() {
   // ── Generate per-product pages ──
   const generatedFiles = [];
   for (const product of products) {
-    const html     = assemblePage(product, products, site, tracking, templateHtml, sellerShelf);
+    const html     = assemblePage(product, products, site, tracking, templateHtml, sellerShelf, checkout);
     const outFile  = path.join(DIST, `${product.slug}.html`);
     fs.writeFileSync(outFile, html, 'utf8');
     generatedFiles.push(`${product.slug}.html`);

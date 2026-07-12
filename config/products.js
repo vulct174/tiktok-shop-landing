@@ -66,6 +66,16 @@ export const site = {
   ],
 };
 
+// ── Checkout: order submission endpoints ──────────────────
+// Replace placeholder values with your real credentials.
+export const checkout = {
+  // Google Sheets Apps Script webhook (POST JSON body)
+  googleSheetWebhook: 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec',
+  // Telegram Bot API
+  telegramBotToken: 'YOUR_BOT_TOKEN',
+  telegramChatId: 'YOUR_CHAT_ID',
+};
+
 // Leave any ID empty ('') to skip that provider's snippet.
 // GTM is the recommended primary container.
 export const tracking = {

@@ -1,9 +1,43 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
-  <rect width="800" height="800" fill="#e8f4f8"/>
-  <rect x="50" y="50" width="700" height="700" fill="#d0e8f0" rx="20"/>
-  <text x="400" y="360" font-family="Arial, sans-serif" font-size="48" fill="#2980b9" text-anchor="middle" font-weight="bold">Nồi Chiên</text>
-  <text x="400" y="420" font-family="Arial, sans-serif" font-size="36" fill="#2980b9" text-anchor="middle">Không Dầu</text>
-  <text x="400" y="500" font-family="Arial, sans-serif" font-size="28" fill="#7fb3d3" text-anchor="middle">5.5L - Sản Phẩm #2</text>
-  <circle cx="400" cy="220" r="80" fill="#2980b9" opacity="0.3"/>
-  <text x="400" y="235" font-family="Arial, sans-serif" font-size="60" fill="#1a5276" text-anchor="middle">🍳</text>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF5F7"/>
+      <stop offset="100%" stop-color="#FDE8EC"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="800" fill="url(#bg)"/>
+  <!-- Floor shadow -->
+  <ellipse cx="400" cy="580" rx="140" ry="18" fill="#E0E0E0" opacity="0.5"/>
+  <!-- Air fryer body -->
+  <rect x="290" y="260" width="220" height="320" rx="28" fill="#2D2D2D"/>
+  <rect x="298" y="268" width="204" height="304" rx="24" fill="#1A1A1A"/>
+  <!-- Digital display panel -->
+  <rect x="330" y="290" width="140" height="60" rx="10" fill="#111"/>
+  <rect x="336" y="296" width="128" height="48" rx="7" fill="#0A0A0A"/>
+  <text x="400" y="328" font-family="Arial, sans-serif" font-size="20" fill="#4FC3F7" text-anchor="middle" font-weight="bold">180C</text>
+  <!-- Touch control row -->
+  <circle cx="345" cy="380" r="14" fill="#333" stroke="#444" stroke-width="1.5"/>
+  <circle cx="400" cy="380" r="16" fill="#FE2C55"/>
+  <circle cx="455" cy="380" r="14" fill="#333" stroke="#444" stroke-width="1.5"/>
+  <!-- Power icon on center -->
+  <path d="M400 373 L400 380" stroke="#FFF" stroke-width="2" stroke-linecap="round"/>
+  <path d="M394 376 A8 8 0 1 0 406 376" fill="none" stroke="#FFF" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- Basket handle -->
+  <rect x="355" y="420" width="90" height="14" rx="7" fill="#444"/>
+  <!-- Basket pull-out -->
+  <rect x="305" y="442" width="190" height="110" rx="14" fill="#3A3A3A"/>
+  <rect x="315" y="452" width="170" height="90" rx="10" fill="#2A2A2A"/>
+  <!-- Grid pattern on basket -->
+  <line x1="340" y1="452" x2="340" y2="542" stroke="#3D3D3D" stroke-width="1.5"/>
+  <line x1="370" y1="452" x2="370" y2="542" stroke="#3D3D3D" stroke-width="1.5"/>
+  <line x1="400" y1="452" x2="400" y2="542" stroke="#3D3D3D" stroke-width="1.5"/>
+  <line x1="430" y1="452" x2="430" y2="542" stroke="#3D3D3D" stroke-width="1.5"/>
+  <line x1="460" y1="452" x2="460" y2="542" stroke="#3D3D3D" stroke-width="1.5"/>
+  <!-- Steam wisps -->
+  <path d="M350 250 Q356 225 350 200 Q344 175 350 155" fill="none" stroke="#FE2C55" stroke-width="2.5" opacity="0.35" stroke-linecap="round"/>
+  <path d="M400 240 Q406 215 400 190 Q394 165 400 140" fill="none" stroke="#FE2C55" stroke-width="2.5" opacity="0.25" stroke-linecap="round"/>
+  <path d="M450 250 Q456 225 450 200 Q444 175 450 155" fill="none" stroke="#FE2C55" stroke-width="2.5" opacity="0.35" stroke-linecap="round"/>
+  <!-- Accent badge -->
+  <rect x="530" y="155" width="130" height="34" rx="17" fill="#FE2C55"/>
+  <text x="595" y="177" font-family="Arial, sans-serif" font-size="13" fill="#FFF" text-anchor="middle" font-weight="bold">5.5L Smart</text>
 </svg>

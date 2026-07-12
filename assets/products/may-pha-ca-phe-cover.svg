@@ -1,9 +1,51 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
-  <rect width="800" height="800" fill="#f0fff0"/>
-  <rect x="50" y="50" width="700" height="700" fill="#d5f5e3" rx="20"/>
-  <text x="400" y="340" font-family="Arial, sans-serif" font-size="44" fill="#27ae60" text-anchor="middle" font-weight="bold">Máy Pha Cà Phê</text>
-  <text x="400" y="400" font-family="Arial, sans-serif" font-size="36" fill="#27ae60" text-anchor="middle">Espresso Tự Động</text>
-  <text x="400" y="480" font-family="Arial, sans-serif" font-size="28" fill="#58d68d" text-anchor="middle">15 Bar - Sản Phẩm #5</text>
-  <circle cx="400" cy="220" r="80" fill="#27ae60" opacity="0.3"/>
-  <text x="400" y="235" font-family="Arial, sans-serif" font-size="60" fill="#145a32" text-anchor="middle">☕</text>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF8F0"/>
+      <stop offset="100%" stop-color="#F5EDE4"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="800" fill="url(#bg)"/>
+  <!-- Floor shadow -->
+  <ellipse cx="400" cy="600" rx="130" ry="16" fill="#D8D0C8" opacity="0.5"/>
+  <!-- Machine body -->
+  <rect x="310" y="220" width="180" height="380" rx="12" fill="#1A1A1A"/>
+  <rect x="316" y="226" width="168" height="368" rx="10" fill="#111"/>
+  <!-- Top group head area -->
+  <rect x="330" y="240" width="140" height="50" rx="6" fill="#2A2A2A"/>
+  <!-- Portafilter -->
+  <rect x="360" y="290" width="80" height="10" rx="3" fill="#888"/>
+  <rect x="375" y="300" width="50" height="25" rx="4" fill="#666"/>
+  <!-- Drip tray -->
+  <rect x="330" y="540" width="140" height="20" rx="4" fill="#333"/>
+  <line x1="345" y1="550" x2="455" y2="550" stroke="#444" stroke-width="1"/>
+  <!-- Steam wand (right side) -->
+  <rect x="490" y="260" width="8" height="120" rx="4" fill="#888"/>
+  <circle cx="494" cy="260" r="8" fill="#666"/>
+  <circle cx="494" cy="385" r="5" fill="#777"/>
+  <!-- Pressure gauge -->
+  <circle cx="400" cy="370" r="35" fill="#222" stroke="#444" stroke-width="2"/>
+  <circle cx="400" cy="370" r="30" fill="#111"/>
+  <text x="400" y="366" font-family="Arial, sans-serif" font-size="10" fill="#4FC3F7" text-anchor="middle">BAR</text>
+  <text x="400" y="382" font-family="Arial, sans-serif" font-size="16" fill="#4FC3F7" text-anchor="middle" font-weight="bold">15</text>
+  <!-- Gauge needle -->
+  <line x1="400" y1="370" x2="418" y2="358" stroke="#FE2C55" stroke-width="2" stroke-linecap="round"/>
+  <!-- Control knobs -->
+  <circle cx="360" cy="440" r="16" fill="#333" stroke="#555" stroke-width="2"/>
+  <circle cx="440" cy="440" r="16" fill="#333" stroke="#555" stroke-width="2"/>
+  <!-- Knob indicators -->
+  <line x1="360" y1="432" x2="360" y2="426" stroke="#FE2C55" stroke-width="2" stroke-linecap="round"/>
+  <line x1="440" y1="432" x2="440" y2="426" stroke="#FE2C55" stroke-width="2" stroke-linecap="round"/>
+  <!-- Cup -->
+  <path d="M370 500 L375 530 L425 530 L430 500 Z" fill="#FFF" stroke="#DDD" stroke-width="1.5"/>
+  <rect x="430" y="505" width="15" height="15" rx="7" fill="none" stroke="#DDD" stroke-width="1.5"/>
+  <!-- Coffee stream -->
+  <line x1="395" y1="325" x2="395" y2="500" stroke="#6D4C41" stroke-width="2" opacity="0.6"/>
+  <line x1="405" y1="325" x2="405" y2="500" stroke="#6D4C41" stroke-width="2" opacity="0.6"/>
+  <!-- Steam from cup -->
+  <path d="M390 490 Q393 480 390 470" fill="none" stroke="#FE2C55" stroke-width="1.5" opacity="0.3" stroke-linecap="round"/>
+  <path d="M410 490 Q413 480 410 470" fill="none" stroke="#FE2C55" stroke-width="1.5" opacity="0.3" stroke-linecap="round"/>
+  <!-- Accent badge -->
+  <rect x="530" y="155" width="130" height="34" rx="17" fill="#FE2C55"/>
+  <text x="595" y="177" font-family="Arial, sans-serif" font-size="13" fill="#FFF" text-anchor="middle" font-weight="bold">15 Bar Pro</text>
 </svg>

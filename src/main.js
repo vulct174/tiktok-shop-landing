@@ -438,10 +438,7 @@
   // ── Expose open/close for address sub-sheet ────────────────
   sheet._open = openSheet;
   sheet._close = closeSheet;
-  Object.defineProperty(sheet, '_addressSaved', {
-    get: function() { return addressSaved; },
-    set: function(v) { addressSaved = v; }
-  });
+  // _addressSaved property is defined below in the place-order section
 
   // ── Wire open triggers ─────────────────────────────────────
   openBtns.forEach(function(btn) {
@@ -457,6 +454,7 @@
     var addrSheet = document.getElementById('address-sheet');
     if (addrSheet && addrSheet.classList.contains('open')) return;
     closeSheet();
+    setTimeout(resetSheet, 350);
   });
 
   // ── ESC ────────────────────────────────────────────────────
@@ -465,7 +463,7 @@
     var addrSheet = document.getElementById('address-sheet');
     // If address sheet is open, let address controller handle ESC
     if (addrSheet && addrSheet.classList.contains('open')) return;
-    if (sheet.classList.contains('open')) closeSheet();
+    if (sheet.classList.contains('open')) { closeSheet(); setTimeout(resetSheet, 350); }
   });
 
   // ── Focus trap ─────────────────────────────────────────────
@@ -557,36 +555,177 @@
   var successEl = document.getElementById('checkout-success');
   var footerEl = document.getElementById('checkout-footer');
 
+  // ── Address gate: disable button until address is saved ───
+  function updatePlaceOrderState() {
+    if (!placeOrderBtn) return;
+    if (addressSaved) {
+      placeOrderBtn.disabled = false;
+      placeOrderBtn.removeAttribute('aria-disabled');
+      placeOrderBtn.textContent = 'Đặt hàng';
+      // Remove hint if present
+      var hint = footerEl && footerEl.querySelector('.checkout-address-required-hint');
+      if (hint) hint.remove();
+    } else {
+      placeOrderBtn.disabled = true;
+      placeOrderBtn.setAttribute('aria-disabled', 'true');
+      placeOrderBtn.textContent = 'Đặt hàng';
+      // Add hint below button if not already present
+      if (footerEl && !footerEl.querySelector('.checkout-address-required-hint')) {
+        var hintEl = document.createElement('span');
+        hintEl.className = 'checkout-address-required-hint';
+        hintEl.textContent = 'Vui lòng thêm địa chỉ giao hàng';
+        footerEl.appendChild(hintEl);
+      }
+    }
+  }
+
+  // Override _addressSaved setter to also update button state
+  var _addrSavedInternal = false;
+  Object.defineProperty(sheet, '_addressSaved', {
+    get: function() { return _addrSavedInternal; },
+    set: function(v) {
+      _addrSavedInternal = v;
+      addressSaved = v;
+      updatePlaceOrderState();
+    },
+    configurable: true
+  });
+
+  // Initial state
+  updatePlaceOrderState();
+
+  // ── Order submission helpers ─────────────────────────────
+  function getPaymentMethodLabel() {
+    var checked = sheet.querySelector('.checkout-payment-radio:checked');
+    if (!checked) return 'COD';
+    var map = { cod: 'COD', paylater: 'TikTok PayLater', card: 'Thẻ tín dụng / Ghi nợ' };
+    return map[checked.value] || checked.value;
+  }
+
+  function buildOrderData() {
+    var qty = getQty();
+    var unitPrice = lineEl ? (parseFloat(lineEl.dataset.unitPrice) || 0) : 0;
+    var total = unitPrice * qty;
+    var currency = (lineEl && lineEl.dataset.currency) || '₫';
+
+    // Get address info from display
+    var addrDisplay = document.getElementById('checkout-address-display');
+    var nameEl = addrDisplay && addrDisplay.querySelector('.checkout-address-name');
+    var phoneEl = addrDisplay && addrDisplay.querySelector('.checkout-address-phone');
+    var streetEl = addrDisplay && addrDisplay.querySelector('.checkout-address-street');
+
+    var customerName = nameEl ? nameEl.textContent.trim() : '';
+    var phone = phoneEl ? phoneEl.textContent.trim() : '';
+    var address = streetEl ? streetEl.textContent.trim() : '';
+
+    // Product info
+    var productName = (lineEl && lineEl.dataset.productName) || '';
+    // Variant from the modal-header-stock or the checkout product variant
+    var variantEl = sheet.querySelector('.checkout-product-variant');
+    var variant = variantEl ? variantEl.textContent.trim() : 'Mặc định';
+
+    var now = new Date();
+    var timestamp = now.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+
+    return {
+      name: customerName,
+      phone: phone,
+      address: address,
+      product: productName,
+      variant: variant,
+      quantity: qty,
+      total: Number(total).toLocaleString('vi-VN') + currency,
+      totalRaw: total,
+      payment: getPaymentMethodLabel(),
+      timestamp: timestamp,
+      pageUrl: window.location.href
+    };
+  }
+
+  function sendToGoogleSheets(data) {
+    var config = window.__CHECKOUT_CONFIG__;
+    if (!config || !config.googleSheetWebhook || config.googleSheetWebhook.indexOf('YOUR_SCRIPT_ID') !== -1) return;
+    try {
+      fetch(config.googleSheetWebhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        mode: 'no-cors'
+      });
+    } catch (e) { /* fire-and-forget */ }
+  }
+
+  function sendToTelegram(data) {
+    var config = window.__CHECKOUT_CONFIG__;
+    if (!config || !config.telegramBotToken || config.telegramBotToken.indexOf('YOUR_BOT_TOKEN') !== -1) return;
+    var text = '\ud83d\uded2 \u0110\u01a0N H\u00c0NG M\u1edaI\n\n' +
+      '\ud83d\udc64 T\u00ean: ' + data.name + '\n' +
+      '\ud83d\udcf1 S\u0110T: ' + data.phone + '\n' +
+      '\ud83d\udccd \u0110\u1ecba ch\u1ec9: ' + data.address + '\n\n' +
+      '\ud83d\udce6 S\u1ea3n ph\u1ea9m: ' + data.product + '\n' +
+      '\ud83c\udff7\ufe0f Ph\u00e2n lo\u1ea1i: ' + data.variant + '\n' +
+      '\ud83d\udd22 S\u1ed1 l\u01b0\u1ee3ng: ' + data.quantity + '\n' +
+      '\ud83d\udcb0 T\u1ed5ng ti\u1ec1n: ' + data.total + '\n' +
+      '\ud83d\udcb3 Thanh to\u00e1n: ' + data.payment + '\n\n' +
+      '\u23f0 Th\u1eddi gian: ' + data.timestamp + '\n' +
+      '\ud83d\udd17 Trang: ' + data.pageUrl;
+    var url = 'https://api.telegram.org/bot' + config.telegramBotToken + '/sendMessage';
+    try {
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: config.telegramChatId,
+          text: text
+        })
+      });
+    } catch (e) { /* fire-and-forget */ }
+  }
+
   if (placeOrderBtn) {
     placeOrderBtn.addEventListener('click', function() {
+      // Gate: must have address saved
+      if (!addressSaved) {
+        // Shouldn't reach here since button is disabled, but safety check
+        if (addressHintEl) addressHintEl.removeAttribute('hidden');
+        return;
+      }
+
       var qty = getQty();
 
-      // Show address hint if no address saved (allow-with-hint per D7)
-      if (!addressSaved && addressHintEl) {
-        addressHintEl.removeAttribute('hidden');
-      }
+      // Loading state
+      placeOrderBtn.disabled = true;
+      placeOrderBtn.textContent = '\u0110ang x\u1EED l\u00FD...';
 
-      // Show success state
-      if (successEl) successEl.removeAttribute('hidden');
-      if (footerEl) footerEl.style.display = 'none';
+      // Build and send order data (fire-and-forget)
+      var orderData = buildOrderData();
+      sendToGoogleSheets(orderData);
+      sendToTelegram(orderData);
 
-      // Fire Purchase tracking event
-      if (lineEl) {
-        var productId = lineEl.dataset.productId || '';
-        var productName = lineEl.dataset.productName || '';
-        var unitPrice = parseFloat(lineEl.dataset.unitPrice) || 0;
-        var currency = lineEl.dataset.currency || 'VND';
-        var value = unitPrice * qty;
-        if (typeof trackEvent === 'function') {
-          trackEvent('Purchase', {
-            content_ids: [productId],
-            content_name: productName,
-            value: value,
-            currency: currency,
-            num_items: qty,
-          });
+      // Show success after brief delay for UX
+      setTimeout(function() {
+        // Show success state
+        if (successEl) successEl.removeAttribute('hidden');
+        if (footerEl) footerEl.style.display = 'none';
+
+        // Fire Purchase tracking event
+        if (lineEl) {
+          var productId = lineEl.dataset.productId || '';
+          var productName = lineEl.dataset.productName || '';
+          var unitPrice = parseFloat(lineEl.dataset.unitPrice) || 0;
+          var currency = lineEl.dataset.currency || 'VND';
+          var value = unitPrice * qty;
+          if (typeof trackEvent === 'function') {
+            trackEvent('Purchase', {
+              content_ids: [productId],
+              content_name: productName,
+              value: value,
+              currency: currency,
+              num_items: qty,
+            });
+          }
         }
-      }
+      }, 600);
     });
   }
 
@@ -596,6 +735,7 @@
     if (addressHintEl) addressHintEl.setAttribute('hidden', '');
     if (footerEl) footerEl.style.display = '';
     setQty(1);
+    updatePlaceOrderState();
   }
 
   var originalClose = closeSheet;

@@ -1,9 +1,40 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
-  <rect width="800" height="800" fill="#fef9e7"/>
-  <rect x="50" y="50" width="700" height="700" fill="#fdebd0" rx="20"/>
-  <text x="400" y="360" font-family="Arial, sans-serif" font-size="44" fill="#e67e22" text-anchor="middle" font-weight="bold">Robot Hút Bụi</text>
-  <text x="400" y="420" font-family="Arial, sans-serif" font-size="36" fill="#e67e22" text-anchor="middle">Thông Minh</text>
-  <text x="400" y="500" font-family="Arial, sans-serif" font-size="28" fill="#f0a060" text-anchor="middle">AI Navigation - Sản Phẩm #3</text>
-  <circle cx="400" cy="220" r="80" fill="#e67e22" opacity="0.3"/>
-  <text x="400" y="235" font-family="Arial, sans-serif" font-size="60" fill="#7d3c00" text-anchor="middle">🤖</text>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5F5F5"/>
+      <stop offset="100%" stop-color="#EEEEEE"/>
+    </linearGradient>
+    <radialGradient id="bodyGrad" cx="50%" cy="45%" r="50%">
+      <stop offset="0%" stop-color="#FAFAFA"/>
+      <stop offset="100%" stop-color="#E0E0E0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="800" fill="url(#bg)"/>
+  <!-- Floor shadow -->
+  <ellipse cx="400" cy="560" rx="170" ry="22" fill="#D0D0D0" opacity="0.5"/>
+  <!-- Robot body disc -->
+  <circle cx="400" cy="440" r="155" fill="url(#bodyGrad)" stroke="#CCC" stroke-width="3"/>
+  <!-- Bumper ring -->
+  <circle cx="400" cy="440" r="155" fill="none" stroke="#BDBDBD" stroke-width="4"/>
+  <!-- Inner circle -->
+  <circle cx="400" cy="430" r="105" fill="#F5F5F5" stroke="#E0E0E0" stroke-width="2"/>
+  <!-- LiDAR turret -->
+  <circle cx="400" cy="350" r="32" fill="#333"/>
+  <circle cx="400" cy="350" r="24" fill="#222"/>
+  <circle cx="400" cy="350" r="9" fill="#FE2C55" opacity="0.9"/>
+  <!-- Scanning LED ring -->
+  <circle cx="400" cy="430" r="65" fill="none" stroke="#FE2C55" stroke-width="2" opacity="0.4" stroke-dasharray="10 6"/>
+  <!-- Control buttons -->
+  <circle cx="365" cy="440" r="11" fill="#E8E8E8" stroke="#CCC" stroke-width="1.5"/>
+  <circle cx="400" cy="440" r="15" fill="#FE2C55"/>
+  <circle cx="435" cy="440" r="11" fill="#E8E8E8" stroke="#CCC" stroke-width="1.5"/>
+  <!-- Home icon on center -->
+  <path d="M395 443 L400 438 L405 443 L405 447 L395 447 Z" fill="#FFF"/>
+  <!-- Wi-Fi signal -->
+  <path d="M540 280 Q557 262 574 280" fill="none" stroke="#FE2C55" stroke-width="2.5" opacity="0.5"/>
+  <path d="M546 292 Q557 280 568 292" fill="none" stroke="#FE2C55" stroke-width="2.5" opacity="0.7"/>
+  <circle cx="557" cy="301" r="3.5" fill="#FE2C55"/>
+  <!-- Accent badge -->
+  <rect x="530" y="155" width="130" height="34" rx="17" fill="#FE2C55"/>
+  <text x="595" y="177" font-family="Arial, sans-serif" font-size="13" fill="#FFF" text-anchor="middle" font-weight="bold">AI Smart</text>
 </svg>
