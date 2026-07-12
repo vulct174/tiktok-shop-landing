@@ -76,6 +76,13 @@ export const checkout = {
   telegramChatId: 'YOUR_CHAT_ID',
 };
 
+// Admin panel — access via ?admin=<adminKey>
+// Then enter adminPassword when prompted
+export const admin = {
+  adminKey: 'xK9m2Qp7vL',   // Change this to your own secret URL key
+  adminPassword: 'admin@2024', // Change this to your own password
+};
+
 // Leave any ID empty ('') to skip that provider's snippet.
 // GTM is the recommended primary container.
 export const tracking = {
