@@ -251,7 +251,13 @@
     nameInput.addEventListener('input', updatePlaceOrderBtn);
   }
   if (phoneInput) {
-    phoneInput.addEventListener('input', function() { validatePhone(); updatePlaceOrderBtn(); });
+    phoneInput.addEventListener('input', function() {
+      // Auto-strip leading 0 (user habit: 0888... → 888...)
+      if (phoneInput.value.indexOf('0') === 0) {
+        phoneInput.value = phoneInput.value.replace(/^0+/, '');
+      }
+      validatePhone(); updatePlaceOrderBtn();
+    });
     phoneInput.addEventListener('blur', function() { validatePhone(); updatePlaceOrderBtn(); });
   }
 
