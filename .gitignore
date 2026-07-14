@@ -6,3 +6,4 @@ Thumbs.db
 .claude/
 code-refer/
 des-refer/
+deploy.py

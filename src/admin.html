@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin Panel</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #e0e0e0; min-height: 100vh; }
+    .admin-login { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+    .admin-login-box { background: #1a1a2e; border: 1px solid #0f3460; border-radius: 12px; padding: 32px; width: 100%; max-width: 360px; text-align: center; }
+    .admin-login-box h1 { color: #e94560; font-size: 20px; margin-bottom: 8px; }
+    .admin-login-box p { color: #888; font-size: 13px; margin-bottom: 24px; }
+    .admin-login-box input { width: 100%; padding: 12px 16px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #e0e0e0; font-size: 14px; margin-bottom: 16px; outline: none; }
+    .admin-login-box input:focus { border-color: #e94560; }
+    .admin-login-box button { width: 100%; padding: 12px; background: #e94560; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+    .admin-login-box button:hover { background: #d63851; }
+    .admin-login-box .error { color: #e94560; font-size: 12px; margin-top: 8px; display: none; }
+    .admin-wrap { display: none; max-width: 960px; margin: 0 auto; padding: 20px; }
+    .admin-wrap.active { display: block; }
+    .admin-hbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #1a1a2e; }
+    .admin-hbar h1 { color: #e94560; font-size: 22px; }
+    .admin-hbar .logout-btn { background: none; border: 1px solid #30363d; color: #888; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+    .admin-hbar .logout-btn:hover { color: #e94560; border-color: #e94560; }
+    .tabs { display: flex; gap: 4px; border-bottom: 1px solid #1a1a2e; margin-bottom: 20px; }
+    .tab { background: none; border: none; color: #888; padding: 12px 20px; cursor: pointer; font-size: 14px; font-weight: 500; border-bottom: 2px solid transparent; transition: all .2s; }
+    .tab:hover { color: #e0e0e0; }
+    .tab.active { color: #e94560; border-bottom-color: #e94560; }
+    .section { display: none; }
+    .section.active { display: block; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #1a1a2e; }
+    th { color: #888; font-weight: 600; text-transform: uppercase; font-size: 11px; }
+    .mono { font-family: monospace; font-size: 12px; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+    .badge.success { background: #0a3d2a; color: #4ecca3; }
+    .badge.error { background: #3d0a0a; color: #e94560; }
+    .badge.pending { background: #3d3a0a; color: #f0c040; }
+    .empty { color: #555; text-align: center; padding: 40px 20px; }
+    .queue-count { padding: 12px 0; color: #f0c040; font-weight: 600; font-size: 14px; }
+    .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; margin-top: 12px; margin-right: 8px; background: #16213e; color: #e0e0e0; }
+    .btn:hover { background: #1a4f8a; }
+    .btn-danger { background: #3d0a0a; color: #e94560; }
+    .btn-danger:hover { background: #5a1a1a; }
+    h4.section-title { color: #888; margin: 24px 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+    .guide { margin: 16px 0; border: 1px solid #1a1a2e; border-radius: 8px; overflow: hidden; }
+    .guide summary { padding: 12px 16px; cursor: pointer; color: #4ecca3; font-weight: 600; font-size: 13px; background: #16213e; }
+    .guide summary:hover { background: #1a2f4e; }
+    .guide-body { padding: 16px; font-size: 13px; line-height: 1.8; }
+    .guide-body ol { padding-left: 20px; margin: 8px 0; }
+    .guide-body li { margin: 6px 0; }
+    .code-block { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 12px 14px; margin: 10px 0; overflow-x: auto; font-family: monospace; font-size: 12px; line-height: 1.6; white-space: pre; color: #c9d1d9; }
+  </style>
+</head>
+<body>
+  <div class="admin-login" id="login-screen">
+    <div class="admin-login-box">
+      <h1>Admin Panel</h1>
+      <p>Nhập mật khẩu để truy cập</p>
+      <input type="password" id="pw-input" placeholder="Mật khẩu" autocomplete="off">
+      <button id="login-btn">Đăng nhập</button>
+      <div class="error" id="error-msg">Sai mật khẩu</div>
+    </div>
+  </div>
+  <div class="admin-wrap" id="main-panel">
+    <div class="admin-hbar">
+      <h1>Admin Panel</h1>
+      <button class="logout-btn" id="logout-btn">Đăng xuất</button>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="log">Order Log</button>
+      <button class="tab" data-tab="queue">Queue</button>
+      <button class="tab" data-tab="config">Config</button>
+    </div>
+    <div class="section active" id="sec-log"></div>
+    <div class="section" id="sec-queue"></div>
+    <div class="section" id="sec-config"></div>
+  </div>
+
+  <script>
+    window.__CHECKOUT_CONFIG__ = {{CHECKOUT_CONFIG_JSON}};
+    window.__ADMIN_CONFIG__ = {{ADMIN_CONFIG_JSON}};
+  </script>
+  <script>
+  (function() {
+    var config = window.__ADMIN_CONFIG__ || {};
+    var checkoutCfg = window.__CHECKOUT_CONFIG__ || {};
+    var ORDER_QUEUE_KEY = 'tts_order_queue';
+    var ORDER_LOG_KEY = 'tts_order_log';
+
+    // --- Auth ---
+    var loginScreen = document.getElementById('login-screen');
+    var mainPanel = document.getElementById('main-panel');
+    var pwInput = document.getElementById('pw-input');
+    var loginBtn = document.getElementById('login-btn');
+    var errorMsg = document.getElementById('error-msg');
+    var logoutBtn = document.getElementById('logout-btn');
+
+    function doLogin() {
+      if (pwInput.value === config.adminPassword) {
+        loginScreen.style.display = 'none';
+        mainPanel.classList.add('active');
+        renderLog();
+      } else {
+        errorMsg.style.display = 'block';
+        pwInput.value = '';
+        pwInput.focus();
+      }
+    }
+    loginBtn.addEventListener('click', doLogin);
+    pwInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+    logoutBtn.addEventListener('click', function() {
+      mainPanel.classList.remove('active');
+      loginScreen.style.display = 'flex';
+      pwInput.value = '';
+      errorMsg.style.display = 'none';
+    });
+
+    // --- Tabs ---
+    var tabs = document.querySelectorAll('.tab');
+    var sections = document.querySelectorAll('.section');
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        tabs.forEach(function(t) { t.classList.remove('active'); });
+        sections.forEach(function(s) { s.classList.remove('active'); });
+        tab.classList.add('active');
+        document.getElementById('sec-' + tab.dataset.tab).classList.add('active');
+        if (tab.dataset.tab === 'log') renderLog();
+        if (tab.dataset.tab === 'queue') renderQueue();
+        if (tab.dataset.tab === 'config') renderConfig();
+      });
+    });
+
+    // --- Data helpers ---
+    function getQueue() { try { return JSON.parse(localStorage.getItem(ORDER_QUEUE_KEY)) || []; } catch(e) { return []; } }
+    function getLog() { try { return JSON.parse(localStorage.getItem(ORDER_LOG_KEY)) || []; } catch(e) { return []; } }
+
+    // --- Render Log ---
+    function renderLog() {
+      var log = getLog();
+      var el = document.getElementById('sec-log');
+      if (!log.length) { el.innerHTML = '<p class="empty">Chưa có đơn hàng nào</p>'; return; }
+      var h = '<table><thead><tr><th>Thời gian</th><th>ID</th><th>Khách</th><th>SĐT</th><th>Sản phẩm</th><th>Tổng</th><th>Status</th></tr></thead><tbody>';
+      for (var i = log.length - 1; i >= 0; i--) {
+        var e = log[i];
+        var cls = e.status === 'done' ? 'success' : e.status === 'failed' ? 'error' : 'pending';
+        var data = e.data || {};
+        h += '<tr><td>' + (e.time || '').replace('T', ' ').substr(0, 19) + '</td>'
+          + '<td class="mono">' + (e.id || '').substr(0, 12) + '</td>'
+          + '<td>' + (data.name || '') + '</td>'
+          + '<td>' + (data.phone || '') + '</td>'
+          + '<td>' + (data.product || '') + '</td>'
+          + '<td>' + (data.total || '') + '</td>'
+          + '<td><span class="badge ' + cls + '">' + e.status + '</span></td></tr>';
+      }
+      h += '</tbody></table>';
+      el.innerHTML = h;
+    }
+
+    // --- Render Queue ---
+    function renderQueue() {
+      var queue = getQueue();
+      var el = document.getElementById('sec-queue');
+      if (!queue.length) { el.innerHTML = '<p class="empty">Queue trống — tất cả đơn đã gửi thành công</p>'; return; }
+      var h = '<div class="queue-count">' + queue.length + ' đơn đang chờ gửi lại</div>';
+      h += '<table><thead><tr><th>ID</th><th>Khách</th><th>SĐT</th><th>Sản phẩm</th><th>Retries</th><th>Tạo lúc</th></tr></thead><tbody>';
+      for (var i = 0; i < queue.length; i++) {
+        var item = queue[i];
+        h += '<tr><td class="mono">' + (item.id || '').substr(0, 12) + '</td>'
+          + '<td>' + (item.data ? item.data.name : '') + '</td>'
+          + '<td>' + (item.data ? item.data.phone : '') + '</td>'
+          + '<td>' + (item.data ? item.data.product : '') + '</td>'
+          + '<td>' + (item.retries || 0) + '</td>'
+          + '<td>' + (item.createdAt || '').replace('T', ' ').substr(0, 19) + '</td></tr>';
+      }
+      h += '</tbody></table>';
+      h += '<button class="btn" id="retry-all-btn">Gửi lại tất cả</button>';
+      h += '<button class="btn btn-danger" id="clear-queue-btn">Xoá queue</button>';
+      el.innerHTML = h;
+      document.getElementById('retry-all-btn').addEventListener('click', function() {
+        alert('Để retry, hãy mở trang sản phẩm với ?admin=' + config.adminKey + ' — retry cần main.js');
+      });
+      document.getElementById('clear-queue-btn').addEventListener('click', function() {
+        if (confirm('Xoá toàn bộ queue? Data sẽ mất vĩnh viễn.')) {
+          localStorage.removeItem(ORDER_QUEUE_KEY);
+          renderQueue();
+        }
+      });
+    }
+
+    // --- Render Config ---
+    function renderConfig() {
+      var el = document.getElementById('sec-config');
+      var h = '<h4 class="section-title">Endpoints</h4><table><tbody>';
+      h += '<tr><td>Google Sheet Webhook</td><td>' + (checkoutCfg.googleSheetWebhook ? (checkoutCfg.googleSheetWebhook.indexOf('YOUR_SCRIPT_ID') !== -1 ? '<span class="badge error">Chưa cấu hình</span>' : '<span class="badge success">OK</span> <span class="mono">' + checkoutCfg.googleSheetWebhook.substr(0, 55) + '...</span>') : '<span class="badge error">Không có</span>') + '</td></tr>';
+      h += '<tr><td>Telegram Bot Token</td><td>' + (checkoutCfg.telegramBotToken ? (checkoutCfg.telegramBotToken.indexOf('YOUR_BOT_TOKEN') !== -1 ? '<span class="badge error">Chưa cấu hình</span>' : '<span class="badge success">OK</span> ***' + checkoutCfg.telegramBotToken.substr(-6)) : '<span class="badge error">Không có</span>') + '</td></tr>';
+      h += '<tr><td>Telegram Chat ID</td><td>' + (checkoutCfg.telegramChatId ? (checkoutCfg.telegramChatId === 'YOUR_CHAT_ID' ? '<span class="badge error">Chưa cấu hình</span>' : '<span class="badge success">OK</span> ' + checkoutCfg.telegramChatId) : '<span class="badge error">Không có</span>') + '</td></tr>';
+      h += '</tbody></table>';
+
+      // Setup guides
+      var showGSheet = !checkoutCfg.googleSheetWebhook || checkoutCfg.googleSheetWebhook.indexOf('YOUR_SCRIPT_ID') !== -1;
+      var showTelegram = !checkoutCfg.telegramBotToken || checkoutCfg.telegramBotToken.indexOf('YOUR_BOT_TOKEN') !== -1;
+
+      if (showGSheet) {
+        h += '<details class="guide"><summary>Hướng dẫn cấu hình Google Sheet Webhook</summary><div class="guide-body"><ol>'
+          + '<li>Tạo Google Sheet mới tại <a href="https://sheets.google.com" target="_blank" style="color:#4ecca3">sheets.google.com</a></li>'
+          + '<li>Đặt header row: Timestamp | Name | Phone | Address | Product | Variant | Quantity | Total | Payment | Page URL</li>'
+          + '<li>Vào <strong>Extensions → Apps Script</strong></li>'
+          + '<li>Xoá code mặc định, paste đoạn sau:</li></ol>'
+          + '<div class="code-block">function doPost(e) {\n  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();\n  var data = JSON.parse(e.postData.contents);\n  sheet.appendRow([\n    data.timestamp,\n    data.name,\n    data.phone,\n    data.address,\n    data.product,\n    data.variant,\n    data.quantity,\n    data.total,\n    data.payment,\n    data.pageUrl\n  ]);\n  return ContentService.createTextOutput(\"OK\");\n}</div>'
+          + '<ol start="5"><li>Click <strong>Deploy → New Deployment</strong></li>'
+          + '<li>Type: <strong>Web app</strong></li>'
+          + '<li>Execute as: <strong>Me</strong> — Who has access: <strong>Anyone</strong></li>'
+          + '<li>Click Deploy → Copy URL (dạng: https://script.google.com/macros/s/ABC.../exec)</li>'
+          + '<li>Mở <code>config/products.js</code>, paste URL vào trường <code>googleSheetWebhook</code></li>'
+          + '<li>Chạy <code>npm run build</code></li></ol></div></details>';
+      }
+
+      if (showTelegram) {
+        h += '<details class="guide"><summary>Hướng dẫn cấu hình Telegram Bot</summary><div class="guide-body"><ol>'
+          + '<li>Mở Telegram, tìm <strong>@BotFather</strong></li>'
+          + '<li>Gửi <code>/newbot</code>, đặt tên và username cho bot</li>'
+          + '<li>Copy token (dạng: <code>123456789:ABCdefGHI...</code>)</li>'
+          + '<li>Paste token vào <code>config/products.js</code> → trường <code>telegramBotToken</code></li>'
+          + '<li>Lấy Chat ID:<ul style="padding-left:16px;margin:6px 0">'
+          + '<li>Thêm bot vào group (hoặc gửi tin nhắn cho bot)</li>'
+          + '<li>Mở: <code>https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code></li>'
+          + '<li>Tìm <code>"chat":{"id": ...}</code> → đó là Chat ID</li></ul></li>'
+          + '<li>Paste Chat ID vào trường <code>telegramChatId</code></li>'
+          + '<li>Chạy <code>npm run build</code></li></ol></div></details>';
+      }
+
+      h += '<h4 class="section-title">localStorage Stats</h4><table><tbody>';
+      h += '<tr><td>Order Queue</td><td>' + getQueue().length + ' items</td></tr>';
+      h += '<tr><td>Order Log</td><td>' + getLog().length + ' entries</td></tr>';
+      var totalSize = 0;
+      for (var k in localStorage) { if (localStorage.hasOwnProperty(k)) totalSize += (localStorage[k] || '').length; }
+      h += '<tr><td>Tổng localStorage</td><td>' + (totalSize / 1024).toFixed(1) + ' KB</td></tr>';
+      h += '</tbody></table>';
+      h += '<button class="btn btn-danger" id="clear-log-btn">Xoá toàn bộ log</button>';
+      el.innerHTML = h;
+      document.getElementById('clear-log-btn').addEventListener('click', function() {
+        if (confirm('Xoá toàn bộ order log?')) { localStorage.removeItem(ORDER_LOG_KEY); renderConfig(); }
+      });
+    }
+  })();
+  </script>
+</body>
+</html>

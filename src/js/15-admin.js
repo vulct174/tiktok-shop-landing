@@ -78,7 +78,14 @@
     + '.admin-btn:hover{background:#1a4f8a}'
     + '.admin-btn-danger{background:#5a1a1a;color:#e94560}'
     + '.admin-btn-danger:hover{background:#7a2a2a}'
-    + 'h4{color:#888;margin:16px 0 8px;font-size:12px;text-transform:uppercase}';
+    + 'h4{color:#888;margin:16px 0 8px;font-size:12px;text-transform:uppercase}'
+    + '.admin-guide{margin:12px 0;border:1px solid #0f3460;border-radius:6px;overflow:hidden}'
+    + '.admin-guide summary{padding:10px 14px;cursor:pointer;color:#4ecca3;font-weight:600;font-size:12px;background:#16213e}'
+    + '.admin-guide summary:hover{background:#1a2f4e}'
+    + '.admin-guide-body{padding:12px 14px;font-size:12px;line-height:1.7}'
+    + '.admin-guide-body ol{padding-left:20px;margin:8px 0}'
+    + '.admin-guide-body li{margin:4px 0}'
+    + '.admin-code-block{background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:10px 12px;margin:8px 0;overflow-x:auto;font-family:monospace;font-size:11px;line-height:1.5;white-space:pre;color:#c9d1d9}';
   document.head.appendChild(style);
 
   // Tab switching
@@ -167,6 +174,60 @@
     html += '<tr><td>Telegram Bot Token</td><td>' + (config.telegramBotToken ? (config.telegramBotToken.indexOf('YOUR_BOT_TOKEN') !== -1 ? '<span class="admin-badge error">Chưa cấu hình</span>' : '<span class="admin-badge success">OK</span> ***' + config.telegramBotToken.substr(-6)) : '<span class="admin-badge error">Không có</span>') + '</td></tr>';
     html += '<tr><td>Telegram Chat ID</td><td>' + (config.telegramChatId ? '<span class="admin-badge success">OK</span> ' + config.telegramChatId : '<span class="admin-badge error">Không có</span>') + '</td></tr>';
     html += '</tbody></table>';
+
+    // Setup guides for unconfigured endpoints
+    var showGSheetGuide = !config.googleSheetWebhook || config.googleSheetWebhook.indexOf('YOUR_SCRIPT_ID') !== -1;
+    var showTelegramGuide = !config.telegramBotToken || config.telegramBotToken.indexOf('YOUR_BOT_TOKEN') !== -1;
+
+    if (showGSheetGuide) {
+      html += '<details class="admin-guide"><summary>Hướng dẫn cấu hình Google Sheet Webhook</summary><div class="admin-guide-body"><ol>'
+        + '<li>Tạo Google Sheet mới tại sheets.google.com</li>'
+        + '<li>Vào Extensions → Apps Script</li>'
+        + '<li>Xoá code mặc định, paste đoạn code sau:</li>'
+        + '</ol>'
+        + '<div class="admin-code-block">function doPost(e) {\n'
+        + '  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();\n'
+        + '  var data = JSON.parse(e.postData.contents);\n'
+        + '  sheet.appendRow([\n'
+        + '    data.timestamp,\n'
+        + '    data.name,\n'
+        + '    data.phone,\n'
+        + '    data.address,\n'
+        + '    data.product,\n'
+        + '    data.variant,\n'
+        + '    data.quantity,\n'
+        + '    data.total,\n'
+        + '    data.payment,\n'
+        + '    data.pageUrl\n'
+        + '  ]);\n'
+        + '  return ContentService.createTextOutput(\'OK\');\n'
+        + '}</div>'
+        + '<ol start="4">'
+        + '<li>Click Deploy → New Deployment</li>'
+        + '<li>Chọn Type: Web app</li>'
+        + '<li>Execute as: Me, Who has access: Anyone</li>'
+        + '<li>Click Deploy → Copy URL</li>'
+        + '<li>Paste URL vào <code>config/products.js</code> → trường <code>googleSheetWebhook</code></li>'
+        + '<li>Chạy <code>npm run build</code> để cập nhật</li>'
+        + '</ol></div></details>';
+    }
+
+    if (showTelegramGuide) {
+      html += '<details class="admin-guide"><summary>Hướng dẫn cấu hình Telegram Bot</summary><div class="admin-guide-body"><ol>'
+        + '<li>Mở Telegram, tìm @BotFather</li>'
+        + '<li>Gửi /newbot, đặt tên và username cho bot</li>'
+        + '<li>Copy token Bot API (dạng: 123456:ABC-DEF...)</li>'
+        + '<li>Paste token vào <code>config/products.js</code> → trường <code>telegramBotToken</code></li>'
+        + '<li>Để lấy Chat ID:'
+        + '<ul style="padding-left:16px;margin:4px 0">'
+        + '<li>Thêm bot vào group chat (hoặc gửi tin nhắn cho bot)</li>'
+        + '<li>Mở: <code>https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code></li>'
+        + '<li>Tìm "chat":{"id": ... } → đó là Chat ID</li>'
+        + '</ul></li>'
+        + '<li>Paste Chat ID vào <code>config/products.js</code> → trường <code>telegramChatId</code></li>'
+        + '<li>Chạy <code>npm run build</code> để cập nhật</li>'
+        + '</ol></div></details>';
+    }
 
     html += '<h4>localStorage Stats</h4><table class="admin-table"><tbody>';
     html += '<tr><td>Order Queue</td><td>' + getQueue().length + ' items</td></tr>';

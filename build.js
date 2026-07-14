@@ -18,6 +18,7 @@ const SRC       = path.join(ROOT, 'src');
 const ASSETS    = path.join(ROOT, 'assets');
 const CONFIG    = path.join(ROOT, 'config', 'products.js');
 const TEMPLATE  = path.join(SRC, 'template.html');
+const ADMIN_TPL = path.join(SRC, 'admin.html');
 
 function numericSort(files) {
   return files.slice().sort((a, b) => {
@@ -83,11 +84,24 @@ async function build() {
     console.log(`  ✓ dist/${product.slug}.html`);
   }
 
-  const indexHtml = renderCatalogIndex(products, site);
+  // index.html: redirect to first product (hide catalog for now)
+  const firstSlug = products[0] ? products[0].slug : 'den-nang-luong-mat-troi';
+  const indexHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta http-equiv="refresh" content="0;url=${firstSlug}.html"><title>Redirecting...</title></head><body></body></html>`;
   fs.writeFileSync(path.join(DIST, 'index.html'), indexHtml, 'utf8');
-  console.log('  ✓ dist/index.html');
+  console.log('  ✓ dist/index.html (redirect)');
 
-  console.log(`\nBuild complete. ${generatedFiles.length} product pages + index.html generated in dist/\n`);
+  // Generate standalone admin page
+  if (fs.existsSync(ADMIN_TPL)) {
+    const checkoutConfigRaw = JSON.stringify(checkout || {}).replace(/<\//g, '<\\/');
+    const adminConfigRaw = JSON.stringify(admin || {}).replace(/<\//g, '<\\/');
+    let adminHtml = fs.readFileSync(ADMIN_TPL, 'utf8');
+    adminHtml = adminHtml.replace('{{CHECKOUT_CONFIG_JSON}}', checkoutConfigRaw);
+    adminHtml = adminHtml.replace('{{ADMIN_CONFIG_JSON}}', adminConfigRaw);
+    fs.writeFileSync(path.join(DIST, 'admin.html'), adminHtml, 'utf8');
+    console.log('  ✓ dist/admin.html');
+  }
+
+  console.log(`\nBuild complete. ${generatedFiles.length} product pages + index.html + admin.html generated in dist/\n`);
 }
 
 build().catch(err => { console.error('Build error:', err); process.exit(1); });
