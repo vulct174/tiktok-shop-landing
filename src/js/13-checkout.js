@@ -215,7 +215,7 @@
   // ── Inline validation: enable button when name + phone valid ──
   function isValidVNPhone(value) {
     var digits = value.replace(/\D/g, '');
-    return /^[35789]\d{8,9}$/.test(digits);
+    return /^[235789]\d{8,9}$/.test(digits);
   }
 
   function updatePlaceOrderBtn() {
