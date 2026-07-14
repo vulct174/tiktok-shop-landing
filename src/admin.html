@@ -231,6 +231,11 @@
           + '<li>Chạy <code>npm run build</code></li></ol></div></details>';
       }
 
+      h += '<h4 class="section-title">Test Webhook</h4>';
+      h += '<button class="btn" id="test-sheet-btn">Test Google Sheet</button> ';
+      h += '<button class="btn" id="test-tg-btn">Test Telegram</button>';
+      h += '<div id="test-result" style="margin-top:10px;font-size:12px;color:#888"></div>';
+
       h += '<h4 class="section-title">localStorage Stats</h4><table><tbody>';
       h += '<tr><td>Order Queue</td><td>' + getQueue().length + ' items</td></tr>';
       h += '<tr><td>Order Log</td><td>' + getLog().length + ' entries</td></tr>';
@@ -242,6 +247,50 @@
       el.innerHTML = h;
       document.getElementById('clear-log-btn').addEventListener('click', function() {
         if (confirm('Xoá toàn bộ order log?')) { localStorage.removeItem(ORDER_LOG_KEY); renderConfig(); }
+      });
+
+      var testResult = document.getElementById('test-result');
+      var testData = {
+        name: 'TEST - Admin Panel',
+        phone: '0123456789',
+        address: '123 Test Street, HCM',
+        product: 'Test Product',
+        variant: 'Default',
+        quantity: 1,
+        total: '815.000VND',
+        totalRaw: 815000,
+        payment: 'COD',
+        timestamp: new Date().toLocaleString('vi-VN'),
+        pageUrl: window.location.href
+      };
+
+      var tsBtn = document.getElementById('test-sheet-btn');
+      if (tsBtn) tsBtn.addEventListener('click', function() {
+        if (!checkoutCfg.googleSheetWebhook || checkoutCfg.googleSheetWebhook.indexOf('YOUR_SCRIPT_ID') !== -1) {
+          testResult.innerHTML = '<span class="badge error">Chưa cấu hình webhook</span>'; return;
+        }
+        testResult.innerHTML = '<span class="badge pending">Đang gửi...</span>';
+        fetch(checkoutCfg.googleSheetWebhook, {
+          method: 'POST', body: JSON.stringify(testData),
+          headers: { 'Content-Type': 'text/plain;charset=UTF-8' }
+        }).then(function(r) {
+          testResult.innerHTML = r.ok ? '<span class="badge success">OK (' + r.status + ')</span> — kiểm tra Sheet' : '<span class="badge error">Lỗi ' + r.status + '</span>';
+        }).catch(function(e) { testResult.innerHTML = '<span class="badge error">' + e.message + '</span>'; });
+      });
+
+      var ttBtn = document.getElementById('test-tg-btn');
+      if (ttBtn) ttBtn.addEventListener('click', function() {
+        if (!checkoutCfg.telegramBotToken || checkoutCfg.telegramBotToken.indexOf('YOUR_BOT_TOKEN') !== -1) {
+          testResult.innerHTML = '<span class="badge error">Chưa cấu hình Telegram</span>'; return;
+        }
+        testResult.innerHTML = '<span class="badge pending">Đang gửi...</span>';
+        var msg = '🧪 TEST ORDER\nKhách: ' + testData.name + '\nSĐT: ' + testData.phone + '\nĐịa chỉ: ' + testData.address + '\nSản phẩm: ' + testData.product + '\nTổng: ' + testData.total;
+        fetch('https://api.telegram.org/bot' + checkoutCfg.telegramBotToken + '/sendMessage', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: checkoutCfg.telegramChatId, text: msg })
+        }).then(function(r) { return r.json(); }).then(function(data) {
+          testResult.innerHTML = data.ok ? '<span class="badge success">OK</span> — kiểm tra Telegram' : '<span class="badge error">' + data.description + '</span>';
+        }).catch(function(e) { testResult.innerHTML = '<span class="badge error">' + e.message + '</span>'; });
       });
     }
   })();

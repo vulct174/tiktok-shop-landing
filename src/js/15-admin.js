@@ -229,6 +229,11 @@
         + '</ol></div></details>';
     }
 
+    html += '<h4>Test Webhook</h4>';
+    html += '<button class="admin-btn admin-test-sheet">Test Google Sheet</button> ';
+    html += '<button class="admin-btn admin-test-telegram">Test Telegram</button>';
+    html += '<div id="admin-test-result" style="margin-top:10px;font-size:12px;color:#888"></div>';
+
     html += '<h4>localStorage Stats</h4><table class="admin-table"><tbody>';
     html += '<tr><td>Order Queue</td><td>' + getQueue().length + ' items</td></tr>';
     html += '<tr><td>Order Log</td><td>' + getLog().length + ' entries</td></tr>';
@@ -245,6 +250,62 @@
         localStorage.removeItem(ORDER_LOG_KEY);
         renderConfig();
       }
+    });
+
+    var testResult = container.querySelector('#admin-test-result');
+    var testData = {
+      name: 'TEST - Admin Panel',
+      phone: '0123456789',
+      address: '123 Test Street, HCM',
+      product: 'Test Product',
+      variant: 'Default',
+      quantity: 1,
+      total: '815.000VND',
+      totalRaw: 815000,
+      payment: 'COD',
+      timestamp: new Date().toLocaleString('vi-VN'),
+      pageUrl: window.location.href
+    };
+
+    var testSheetBtn = container.querySelector('.admin-test-sheet');
+    if (testSheetBtn) testSheetBtn.addEventListener('click', function() {
+      if (!config.googleSheetWebhook || config.googleSheetWebhook.indexOf('YOUR_SCRIPT_ID') !== -1) {
+        testResult.innerHTML = '<span class="admin-badge error">Chưa cấu hình webhook</span>';
+        return;
+      }
+      testResult.innerHTML = '<span class="admin-badge pending">Đang gửi...</span>';
+      fetch(config.googleSheetWebhook, {
+        method: 'POST',
+        body: JSON.stringify(testData),
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' }
+      }).then(function(r) {
+        testResult.innerHTML = r.ok
+          ? '<span class="admin-badge success">OK (' + r.status + ')</span> — kiểm tra Sheet'
+          : '<span class="admin-badge error">Lỗi ' + r.status + '</span>';
+      }).catch(function(e) {
+        testResult.innerHTML = '<span class="admin-badge error">Lỗi: ' + e.message + '</span>';
+      });
+    });
+
+    var testTgBtn = container.querySelector('.admin-test-telegram');
+    if (testTgBtn) testTgBtn.addEventListener('click', function() {
+      if (!config.telegramBotToken || config.telegramBotToken.indexOf('YOUR_BOT_TOKEN') !== -1) {
+        testResult.innerHTML = '<span class="admin-badge error">Chưa cấu hình Telegram</span>';
+        return;
+      }
+      testResult.innerHTML = '<span class="admin-badge pending">Đang gửi...</span>';
+      var msg = '🧪 TEST ORDER\nKhách: ' + testData.name + '\nSĐT: ' + testData.phone + '\nĐịa chỉ: ' + testData.address + '\nSản phẩm: ' + testData.product + '\nTổng: ' + testData.total;
+      fetch('https://api.telegram.org/bot' + config.telegramBotToken + '/sendMessage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: config.telegramChatId, text: msg })
+      }).then(function(r) { return r.json(); }).then(function(data) {
+        testResult.innerHTML = data.ok
+          ? '<span class="admin-badge success">OK</span> — kiểm tra Telegram'
+          : '<span class="admin-badge error">Lỗi: ' + data.description + '</span>';
+      }).catch(function(e) {
+        testResult.innerHTML = '<span class="admin-badge error">Lỗi: ' + e.message + '</span>';
+      });
     });
   }
 
