@@ -99,7 +99,7 @@ export const products = [
     id: 'p1',
     slug: 'den-nang-luong-mat-troi',
     name: 'Đèn Năng Lượng Mặt Trời Mắt Ngọc 2000W - 308 LED',
-    price: 809000,           // -56% vs original
+    price: 815000,           // -56% vs original
     originalPrice: 1818000,
     rating: 4.8,             // 10 đánh giá
     sold: 49,
@@ -397,7 +397,7 @@ export const products = [
 export const sellerShelf = [
   {
     name: '[TẶNG DÂY 5M] [BẢN CAO CẤP 308 LED] [5 MẶT SÁNG TOẢ RỘNG GẤP 3] [ BẢO HÀNH 5 NĂM 1 ĐỔI 1] Đèn Năng Lượng Mặt Trời Mắt Ngọc 2000W.',
-    price: 809000, originalPrice: 1818000, rating: 4.7, sold: 1320, flash: true,
+    price: 815000, originalPrice: 1818000, rating: 4.7, sold: 1320, flash: true,
     img: 'https://p16-oec-va.ibyteimg.com/tos-maliva-i-o3syd03w52-us/d6740177fd1b44159aed1a66be57863f~tplv-o3syd03w52-resize-webp:800:800.webp?dr=15592&t=555f072d&ps=933b5bde&shp=8dbd94bf&shcp=e1be8f53&idc=my&from=2378011839',
     href: 'https://shop.tiktok.com/vn/pdp/1733587213215368841',
   },
