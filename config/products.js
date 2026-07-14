@@ -70,7 +70,7 @@ export const site = {
 // Replace placeholder values with your real credentials.
 export const checkout = {
   // Google Sheets Apps Script webhook (POST JSON body)
-  googleSheetWebhook: 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec',
+  googleSheetWebhook: 'https://script.google.com/macros/s/AKfycbxXOgb9Fn95vZAoVV3skgJ2by1pkzUWabedMP0h_ThUZjfrn5ptdXiiwdXzXEBVugI/exec',
   // Telegram Bot API
   telegramBotToken: 'YOUR_BOT_TOKEN',
   telegramChatId: 'YOUR_CHAT_ID',
