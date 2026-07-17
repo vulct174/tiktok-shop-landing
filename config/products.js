@@ -87,7 +87,7 @@ export const admin = {
 // GTM is the recommended primary container.
 export const tracking = {
   metaPixelId: '',
-  tiktokPixelId: '',
+  tiktokPixelId: 'D9D6F9BC77U2EG6DMA0G',
   googleTagId: '',
   gtmId: '',
 };
