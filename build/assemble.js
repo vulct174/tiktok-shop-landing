@@ -177,7 +177,6 @@ export function assemblePage(product, allProducts, site, tracking, templateHtml,
   html = html.replace('{{OG_IMAGE}}',         esc(`${imgBaseDir}/${ogImg}`));
   html = html.replace('{{PRODUCT_JSON}}',     productJsonRaw);
   html = html.replace('{{CHECKOUT_CONFIG_JSON}}', checkoutConfigRaw);
-  html = html.replace('{{ADMIN_CONFIG_JSON}}', adminConfigRaw);
   html = html.replace('{{PRELOAD_LCP}}',      preloadLcp);
 
   // Section substitution (12 sections)
