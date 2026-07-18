@@ -8,6 +8,7 @@ import { renderAbout } from './sections/about.js';
 import { renderHashtags } from './sections/hashtags.js';
 import { renderSellerShelf } from './sections/seller-shelf.js';
 import { renderAlsoLike } from './sections/also-like.js';
+import { readFileSync } from 'fs';
 import { renderBreadcrumb } from './sections/breadcrumb.js';
 import { renderFooter } from './sections/footer.js';
 import { renderCheckoutSheet } from './sections/checkout.js';
@@ -78,11 +79,17 @@ src="https://www.facebook.com/tr?id=${esc(tracking.metaPixelId)}&ev=PageView&nos
   }
 
   // ── TikTok Pixel ──
-  // If custom script provided, use it directly; otherwise use default with pixelId
+  // Priority: 1) custom script in config, 2) external file, 3) pixelId
   if (tracking.tiktokPixelScript) {
     parts.push(tracking.tiktokPixelScript);
-  } else if (tracking.tiktokPixelId) {
-    parts.push(`<!-- TikTok Pixel Code Start -->
+  } else {
+    try {
+      const tiktokPixelFile = readFileSync('config/tiktok-pixel.html', 'utf-8');
+      if (tiktokPixelFile.trim()) {
+        parts.push(tiktokPixelFile);
+      } else if (tracking.tiktokPixelId) {
+        // Fallback to default template with pixelId
+        parts.push(`<!-- TikTok Pixel Code Start -->
 <script>
 !function (w, d, t) {
   w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
@@ -94,6 +101,24 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 }(window, document, 'ttq');
 <\/script>
 <!-- TikTok Pixel Code End -->`);
+      }
+    } catch (e) {
+      // File doesn't exist, use pixelId if available
+      if (tracking.tiktokPixelId) {
+        parts.push(`<!-- TikTok Pixel Code Start -->
+<script>
+!function (w, d, t) {
+  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+
+  ttq.load('${esc(tracking.tiktokPixelId)}');
+  ttq.page();
+}(window, document, 'ttq');
+<\/script>
+<!-- TikTok Pixel Code End -->`);
+      }
+    }
   }
 
   // ── Google Analytics 4 / gtag ──
