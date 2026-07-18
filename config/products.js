@@ -90,6 +90,9 @@ export const admin = {
 export const tracking = {
   metaPixelId: '',
   tiktokPixelId: 'D9D6F9BC77U2EG6DMA0G',
+  // Optional: paste full TikTok Pixel script here (overrides tiktokPixelId)
+  // When TikTok updates their script, just paste the new version here
+  tiktokPixelScript: '',
   googleTagId: '',
   gtmId: '',
 };

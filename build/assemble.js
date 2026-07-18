@@ -78,7 +78,10 @@ src="https://www.facebook.com/tr?id=${esc(tracking.metaPixelId)}&ev=PageView&nos
   }
 
   // ── TikTok Pixel ──
-  if (tracking.tiktokPixelId) {
+  // If custom script provided, use it directly; otherwise use default with pixelId
+  if (tracking.tiktokPixelScript) {
+    parts.push(tracking.tiktokPixelScript);
+  } else if (tracking.tiktokPixelId) {
     parts.push(`<!-- TikTok Pixel Code Start -->
 <script>
 !function (w, d, t) {
