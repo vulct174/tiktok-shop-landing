@@ -7,6 +7,3 @@ Thumbs.db
 code-refer/
 des-refer/
 deploy.py
-
-# Tracking config contains sensitive credentials
-config/tracking.js
