@@ -347,10 +347,14 @@
     if (!config || !config.googleSheetWebhook || config.googleSheetWebhook.indexOf('YOUR_SCRIPT_ID') !== -1) {
       return Promise.resolve('skipped');
     }
+    // Add secret token for authentication
+    var payload = Object.assign({}, data, {
+      _secret: config.webhookSecret || ''
+    });
     return fetch(config.googleSheetWebhook, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
       mode: 'no-cors'
     }).then(function() { return 'ok'; })
       .catch(function(e) { return Promise.reject(e); });

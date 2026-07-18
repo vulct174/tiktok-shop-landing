@@ -71,6 +71,8 @@ export const site = {
 export const checkout = {
   // Google Sheets Apps Script webhook (POST JSON body)
   googleSheetWebhook: 'https://script.google.com/macros/s/AKfycbzf_A0wQJIvgd0-GEKmp6mEgmYnW86H0JT_Sssa2mD33taMYcfXtQIjtuI9fUW1LM89/exec',
+  // Secret token for webhook authentication (change this!)
+  webhookSecret: 'CHANGE_ME_TO_RANDOM_STRING_AT_LEAST_32_CHARS',
   // Telegram Bot API
   telegramBotToken: 'YOUR_BOT_TOKEN',
   telegramChatId: 'YOUR_CHAT_ID',
